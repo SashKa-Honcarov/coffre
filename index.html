@@ -503,26 +503,27 @@
         }
 
         // Final acceptance & Confetti animation
+// Final acceptance & Confetti animation
         function acceptInvitation() {
             confetti({
                 particleCount: 120,
                 spread: 75,
                 origin: { y: 0.6 }
             });
-
+        
             setTimeout(() => {
                 confetti({ particleCount: 70, angle: 60, spread: 55, origin: { x: 0 } });
                 confetti({ particleCount: 70, angle: 120, spread: 55, origin: { x: 1 } });
             }, 250);
-
+        
             // Construct formatted Messenger Message
             const textMessage = `Привет! ☕ Я с удовольствием пойду с тобой на кофе!\n\nМой выбор:\n• Напиток: ${selections.coffee}\n• Сироп: ${selections.syrup}\n• Десерт: ${selections.dessert}\n• Когда: Завтра (${tomorrowFormatted}) в ${selections.time}`;
             const encodedText = encodeURIComponent(textMessage);
-
-            // Set messenger links
-            document.getElementById('telegram-link').href = `https://t.me/share/url?url=&text=${encodedText}`;
+        
+            // ВМЕСТО https://t.me/ СТАВИМ ПРОТОКОЛ tg://msg_url ДЛЯ ОТКРЫТИЯ ПРИЛОЖЕНИЯ
+            document.getElementById('telegram-link').href = `tg://msg_url?url=&text=${encodedText}`;
             document.getElementById('whatsapp-link').href = `https://api.whatsapp.com/send?text=${encodedText}`;
-
+        
             goToStep(4);
         }
     </script>
