@@ -3,528 +3,339 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Приглашение на кофе ☕✨</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Canvas Confetti -->
-    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Comfortaa:wght@600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
+    <title>Жду тебя сегодня! ☕✨</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
+        :root {
+            --bg-color: #fdf8f5;
+            --card-bg: #ffffff;
+            --accent: #ff6b6b;
+            --accent-hover: #ff5252;
+            --text-main: #2d3436;
+            --text-sub: #636e72;
+            --coffee-orange: #ff9f43;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
         body {
-            font-family: 'Nunito', sans-serif;
-            background: linear-gradient(135deg, #fdfbf7 0%, #f7ebe1 50%, #f2dcd3 100%);
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
             min-height: 100vh;
-            overflow-x: hidden;
-            color: #4a3b32;
+            padding: 20px;
         }
 
-        .font-rounded {
-            font-family: 'Comfortaa', cursive;
-        }
-
-        /* Glassmorphism Card Effect */
-        .glass-card {
-            background: rgba(255, 255, 255, 0.94);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.85);
-            box-shadow: 0 20px 50px rgba(92, 61, 46, 0.12);
-        }
-
-        /* Animated Steam for Coffee Cup */
-        @keyframes steam {
-            0% { transform: translateY(0) scaleX(1); opacity: 0; }
-            50% { opacity: 0.6; }
-            100% { transform: translateY(-26px) scaleX(1.4); opacity: 0; }
-        }
-
-        .steam-line {
-            animation: steam 2.5s infinite ease-out;
-        }
-        .steam-line:nth-child(2) { animation-delay: 0.7s; }
-        .steam-line:nth-child(3) { animation-delay: 1.4s; }
-
-        /* Floating background items */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-12px) rotate(6deg); }
-        }
-
-        .floating {
-            animation: float 4s ease-in-out infinite;
-        }
-
-        /* Pulse glow for primary CTA */
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 15px rgba(217, 119, 6, 0.35); }
-            50% { shadow: 0 0 30px rgba(217, 119, 6, 0.65); }
-        }
-
-        .btn-glow {
-            animation: pulse-glow 2.5s infinite;
-        }
-
-        /* Option selection cards */
-        .select-option {
-            transition: all 0.22s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            border-width: 2px;
-        }
-
-        .select-option:hover {
-            transform: translateY(-2px);
-        }
-
-        .select-option.active {
-            border-color: #d97706;
-            background-color: #fef3c7;
-            transform: scale(1.02);
-            box-shadow: 0 6px 16px rgba(217, 119, 6, 0.15);
-        }
-
-        /* Step transition effects */
-        .step-section {
-            display: none;
-            opacity: 0;
-            transform: translateY(12px);
-            transition: all 0.35s ease;
-        }
-
-        .step-section.active {
-            display: block;
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Color transitions for cup icon */
-        #cup-icon-container {
-            transition: background 0.4s ease, transform 0.3s ease;
-        }
-
-        /* Smooth Growing transition for YES Button */
-        #yes-btn {
-            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), background-color 0.3s ease, box-shadow 0.3s ease;
-            transform-origin: center center;
-        }
-
-        /* Smooth Dodge transition for NO Button */
-        #no-btn {
-            transition: transform 0.25s ease-out, background-color 0.2s ease;
+        .container {
+            background: var(--card-bg);
+            border-radius: 28px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            max-width: 420px;
+            width: 100%;
+            padding: 28px 20px;
+            text-align: center;
             position: relative;
+            overflow: hidden;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #ffeaa7;
+            color: #d63031;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 6px 16px;
+            border-radius: 20px;
+            margin-bottom: 16px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            margin-bottom: 8px;
+            color: #2d3436;
+        }
+
+        p.subtitle {
+            font-size: 0.95rem;
+            color: var(--text-sub);
+            margin-bottom: 20px;
+            line-height: 1.4;
+        }
+
+        .order-card {
+            background: #fff5f0;
+            border: 2px dashed #ffbe76;
+            border-radius: 18px;
+            padding: 14px;
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .order-card h3 {
+            font-size: 0.8rem;
+            color: #e056fd;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 6px;
+        }
+
+        .order-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: #30336b;
+            margin-bottom: 4px;
+        }
+
+        .time-picker-title {
+            font-weight: 700;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+
+        .time-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .time-btn {
+            background: #f1f2f6;
+            border: 2px solid transparent;
+            border-radius: 14px;
+            padding: 12px;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: #2f3542;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .time-btn:hover, .time-btn.active {
+            background: #ffffff;
+            border-color: var(--accent);
+            color: var(--accent);
+            box-shadow: 0 4px 12px rgba(255,107,107,0.2);
+        }
+
+        /* Симуляция чата / Предпросмотр сообщения */
+        .chat-preview {
+            background: #e1f5fe;
+            border-radius: 16px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            text-align: left;
+            position: relative;
+            border-left: 4px solid #0288d1;
+        }
+
+        .chat-preview-title {
+            font-size: 0.75rem;
+            color: #0288d1;
+            font-weight: 700;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+
+        .chat-preview-text {
+            font-size: 0.9rem;
+            color: #01579b;
+            line-height: 1.3;
+        }
+
+        .custom-time-input {
+            display: none;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 14px;
+            border: 2px solid var(--accent);
+            border-radius: 12px;
+            font-size: 1rem;
+            text-align: center;
+            outline: none;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            color: white;
+            border: none;
+            width: 100%;
+            padding: 16px;
+            border-radius: 16px;
+            font-size: 1.05rem;
+            font-weight: 700;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(255,107,107,0.35);
+            transition: transform 0.2s, box-shadow 0.2s;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+        }
+
+        .action-btn:active {
+            transform: scale(0.98);
+        }
+
+        .funny-progress {
+            display: none;
+            margin-top: 16px;
+            background: #f8f9fa;
+            border-radius: 14px;
+            padding: 12px;
+            font-size: 0.85rem;
+            color: #57606f;
+        }
+
+        .progress-bar-bg {
+            background: #dfe4ea;
+            height: 8px;
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 6px;
+        }
+
+        .progress-bar-fill {
+            background: #2ed573;
+            height: 100%;
+            width: 0%;
+            transition: width 1.5s ease-in-out;
         }
     </style>
 </head>
-<body class="flex flex-col items-center justify-center p-3 sm:p-6 min-h-screen relative">
+<body>
 
-    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
-        <div class="absolute top-8 left-[8%] text-amber-300 text-3xl floating" style="animation-delay: 0s;">✨</div>
-        <div class="absolute top-1/4 right-[10%] text-rose-300 text-4xl floating" style="animation-delay: 1.5s;">☕</div>
-        <div class="absolute bottom-1/3 left-[6%] text-amber-400 text-3xl floating" style="animation-delay: 2.5s;">🍊</div>
-        <div class="absolute bottom-10 right-[12%] text-emerald-400 text-3xl floating" style="animation-delay: 0.8s;">🍃</div>
-    </div>
+    <div class="container">
+        <div class="status-badge">⚠️ Статус: Время не подтверждено!</div>
+        
+        <h1>Так, на сегодня всё в силе? 😏</h1>
+        <p class="subtitle">Ты обещала написать время, но кажется закрутилась! Твой кофе и круассан уже волнуются ☕🥐</p>
 
-    <!-- MAIN APP CONTAINER -->
-    <div class="w-full max-w-lg glass-card rounded-3xl p-5 sm:p-8 relative z-10 my-auto">
-
-        <div id="step-1" class="step-section active">
-            <div class="text-center mb-6">
-                <!-- Interactive Dynamic Drink Cup -->
-                <div class="relative w-24 h-24 mx-auto mb-3 flex items-center justify-center">
-                    <div class="absolute -top-5 flex gap-1.5 justify-center w-full">
-                        <span class="steam-line w-1.5 h-6 bg-amber-400 rounded-full blur-[0.5px]"></span>
-                        <span class="steam-line w-1.5 h-8 bg-amber-300 rounded-full blur-[0.5px]"></span>
-                        <span class="steam-line w-1.5 h-5 bg-amber-400 rounded-full blur-[0.5px]"></span>
-                    </div>
-                    <div id="cup-icon-container" class="w-20 h-20 bg-gradient-to-br from-orange-500 to-amber-600 rounded-2xl shadow-lg flex items-center justify-center text-white text-4xl">
-                        <i id="cup-emoji" class="fa-solid fa-mug-hot"></i>
-                    </div>
-                </div>
-
-                <span class="px-3.5 py-1 bg-rose-100 text-rose-700 font-extrabold text-[11px] uppercase tracking-widest rounded-full">
-                    Приглашение на кофе
-                </span>
-                <h1 class="text-2xl sm:text-3xl font-bold font-rounded text-amber-950 mt-2 mb-1">
-                    Собери свой идеальный напиток 💌
-                </h1>
-                <p class="text-xs sm:text-sm text-stone-500">Что поднимет тебе настроение?</p>
-            </div>
-
-            <!-- Beverage Selection -->
-            <div class="mb-5">
-                <label class="block text-xs font-bold uppercase text-stone-500 mb-2">1. Выбери напиток:</label>
-                <div class="grid grid-cols-2 gap-2.5">
-                    <button onclick="selectOption('coffee', 'Бамбл кофе', '🍊', 'linear-gradient(135deg, #f97316, #ea580c)')" class="coffee-opt select-option border-amber-400 bg-amber-50/70 p-3 rounded-2xl flex items-center gap-3 text-left active">
-                        <span class="text-3xl">🍊</span>
-                        <div>
-                            <div class="font-bold text-sm text-amber-950">Бамбл кофе</div>
-                            <div class="text-[11px] text-amber-700 font-semibold">Эспрессо + Сок</div>
-                        </div>
-                    </button>
-
-                    <button onclick="selectOption('coffee', 'Мятное смузи', '🍃', 'linear-gradient(135deg, #10b981, #059669)')" class="coffee-opt select-option border-stone-200 bg-white p-3 rounded-2xl flex items-center gap-3 text-left">
-                        <span class="text-3xl">🍃</span>
-                        <div>
-                            <div class="font-bold text-sm text-emerald-950">Мятное смузи</div>
-                            <div class="text-[11px] text-emerald-700 font-semibold">Свежее & Мятное</div>
-                        </div>
-                    </button>
-
-                    <button onclick="selectOption('coffee', 'Капучино', '☕', 'linear-gradient(135deg, #d97706, #b45309)')" class="coffee-opt select-option border-stone-200 bg-white p-3 rounded-2xl flex items-center gap-3 text-left">
-                        <span class="text-3xl">☕</span>
-                        <div>
-                            <div class="font-bold text-sm text-amber-950">Капучино</div>
-                            <div class="text-[11px] text-stone-400">Пышная пенка</div>
-                        </div>
-                    </button>
-
-                    <button onclick="selectOption('coffee', 'Латте', '🥛', 'linear-gradient(135deg, #a16207, #854d0e)')" class="coffee-opt select-option border-stone-200 bg-white p-3 rounded-2xl flex items-center gap-3 text-left">
-                        <span class="text-3xl">🥛</span>
-                        <div>
-                            <div class="font-bold text-sm text-amber-950">Латте</div>
-                            <div class="text-[11px] text-stone-400">Нежное молоко</div>
-                        </div>
-                    </button>
-
-                    <button onclick="selectOption('coffee', 'Раф кофе', '🍨', 'linear-gradient(135deg, #eab308, #ca8a04)')" class="coffee-opt select-option border-stone-200 bg-white p-3 rounded-2xl flex items-center gap-3 text-left col-span-2">
-                        <span class="text-3xl">🍨</span>
-                        <div>
-                            <div class="font-bold text-sm text-amber-950">Раф кофе</div>
-                            <div class="text-[11px] text-amber-800 font-semibold">Сливочно-ванитьный вкус</div>
-                        </div>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Syrup Selection -->
-            <div class="mb-5">
-                <label class="block text-xs font-bold uppercase text-stone-500 mb-2">2. Топпинг / Сироп:</label>
-                <div class="grid grid-cols-3 gap-2">
-                    <button onclick="selectOption('syrup', 'Без сиропа', '🚫')" class="syrup-opt select-option border-stone-200 bg-white p-2.5 rounded-xl text-center active">
-                        <div class="text-xl">🚫</div>
-                        <div class="font-bold text-xs text-amber-950 mt-1">Без сиропа</div>
-                    </button>
-                    <button onclick="selectOption('syrup', 'Соленая карамель', '🧂')" class="syrup-opt select-option border-stone-200 bg-white p-2.5 rounded-xl text-center">
-                        <div class="text-xl">🧂</div>
-                        <div class="font-bold text-xs text-amber-950 mt-1">Карамель</div>
-                    </button>
-                    <button onclick="selectOption('syrup', 'Ваниль', '🌼')" class="syrup-opt select-option border-stone-200 bg-white p-2.5 rounded-xl text-center">
-                        <div class="text-xl">🌼</div>
-                        <div class="font-bold text-xs text-amber-950 mt-1">Ваниль</div>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Dessert Selection -->
-            <div class="mb-6">
-                <label class="block text-xs font-bold uppercase text-stone-500 mb-2">3. Десерт:</label>
-                <div class="grid grid-cols-2 gap-2.5">
-                    <button onclick="selectOption('dessert', 'Круассан', '🥐')" class="dessert-opt select-option border-stone-200 bg-white p-3 rounded-2xl flex items-center gap-3 active">
-                        <span class="text-2xl">🥐</span>
-                        <span class="font-bold text-xs sm:text-sm text-amber-950">Круассан</span>
-                    </button>
-                    <button onclick="selectOption('dessert', 'Чизкейк', '🍰')" class="dessert-opt select-option border-stone-200 bg-white p-3 rounded-2xl flex items-center gap-3">
-                        <span class="text-2xl">🍰</span>
-                        <span class="font-bold text-xs sm:text-sm text-amber-950">Чизкейк</span>
-                    </button>
-                    <button onclick="selectOption('dessert', 'Макаруны', '🧁')" class="dessert-opt select-option border-stone-200 bg-white p-3 rounded-2xl flex items-center gap-3">
-                        <span class="text-2xl">🧁</span>
-                        <span class="font-bold text-xs sm:text-sm text-amber-950">Макаруны</span>
-                    </button>
-                    <button onclick="selectOption('dessert', 'Синнабон', '🥮')" class="dessert-opt select-option border-stone-200 bg-white p-3 rounded-2xl flex items-center gap-3">
-                        <span class="text-2xl">🥮</span>
-                        <span class="font-bold text-xs sm:text-sm text-amber-950">Синнабон</span>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Live Selection Summary Bar -->
-            <div class="bg-amber-100/70 border border-amber-300/80 rounded-2xl p-3 mb-6 flex items-center justify-between text-xs sm:text-sm shadow-sm">
-                <span class="text-amber-900 font-semibold">Твой выбор:</span>
-                <span id="order-preview-text" class="font-extrabold text-amber-950">Бамбл кофе + Круассан</span>
-            </div>
-
-            <button onclick="goToStep(2)" class="w-full py-4 bg-gradient-to-r from-amber-600 to-rose-500 hover:from-amber-700 hover:to-rose-600 text-white font-extrabold text-base rounded-2xl shadow-lg transition transform active:scale-95 btn-glow flex items-center justify-center gap-2">
-                <span>Продолжить к времени</span>
-                <i class="fa-solid fa-arrow-right"></i>
-            </button>
+        <div class="order-card">
+            <h3>Твой заказ ожидает подтверждения:</h3>
+            <div class="order-item">🍊 Бамбл / Мятное смузи + 🥐 Круассан</div>
+            <div class="order-item">📍 Отличное настроение и компания</div>
         </div>
 
-        <div id="step-2" class="step-section">
-            <div class="text-center mb-6">
-                <span class="text-xs font-extrabold uppercase tracking-wider text-amber-800 bg-amber-100 px-3 py-1 rounded-full">Когда встречаемся</span>
-                <h2 class="text-2xl font-bold font-rounded text-amber-950 mt-2">Дата и Время ⏰</h2>
-                <p class="text-xs text-stone-500">Предлагаю устроить отличный перерыв уже завтра!</p>
-            </div>
+        <div class="time-picker-title">Жми на удобное время ниже: 👇</div>
 
-            <!-- STRICT TOMORROW DATE BANNER -->
-            <div class="mb-6 bg-gradient-to-r from-amber-50 via-rose-50 to-amber-50 border-2 border-amber-400 rounded-2xl p-4 text-center shadow-md">
-                <div class="text-xs uppercase font-extrabold text-amber-800 tracking-wider mb-1 flex items-center justify-center gap-1.5">
-                    <i class="fa-solid fa-calendar-star text-amber-600"></i>
-                    <span>Дата встречи:</span>
-                </div>
-                <div id="tomorrow-date-display" class="text-xl sm:text-2xl font-black font-rounded text-rose-600 my-1">
-                    <!-- Tomorrow's calculated date will be inserted automatically -->
-                </div>
-                <div class="text-xs text-stone-500 font-medium">День свободен специально для нас ✨</div>
-            </div>
+        <div class="time-grid">
+            <button class="time-btn active" onclick="selectTime('17:00', this)">18:00 🕔</button>
+            <button class="time-btn" onclick="selectTime('18:00', this)">19:00 🕕</button>
+            <button class="time-btn" onclick="selectTime('19:00', this)">20:00 🕖</button>
+            <button class="time-btn" onclick="enableCustomTime(this)">Свой вариант ✏️</button>
+        </div>
 
-            <!-- Time Options -->
-            <div class="mb-8">
-                <label class="block text-xs font-bold uppercase text-stone-500 mb-2">Выбери удобное время:</label>
-                <div class="grid grid-cols-2 gap-2.5">
-                    <button onclick="selectOption('time', '15:00', '☀️')" class="time-opt select-option border-stone-200 bg-white p-3.5 rounded-2xl text-center active">
-                        <span class="text-xl">☀️</span>
-                        <div class="font-extrabold text-sm text-amber-950 mt-0.5">15:00</div>
-                        <div class="text-[10px] text-stone-400">Дневной кофе</div>
-                    </button>
-                    
-                    <button onclick="selectOption('time', '17:00', '🌤️')" class="time-opt select-option border-stone-200 bg-white p-3.5 rounded-2xl text-center">
-                        <span class="text-xl">🌤️</span>
-                        <div class="font-extrabold text-sm text-amber-950 mt-0.5">17:00</div>
-                        <div class="text-[10px] text-stone-400">Уютный перерыв</div>
-                    </button>
+        <input type="text" id="custom-time" class="custom-time-input" placeholder="Например: 19:30" oninput="updateCustomTime(this.value)">
 
-                    <button onclick="selectOption('time', '19:00', '🌙')" class="time-opt select-option border-stone-200 bg-white p-3.5 rounded-2xl text-center">
-                        <span class="text-xl">🌙</span>
-                        <div class="font-extrabold text-sm text-amber-950 mt-0.5">19:00</div>
-                        <div class="text-[10px] text-stone-400">Вечерний отдых</div>
-                    </button>
-
-                    <button onclick="selectOption('time', 'Напишу в чате', '✍️')" class="time-opt select-option border-stone-200 bg-white p-3.5 rounded-2xl text-center">
-                        <span class="text-xl">✍️</span>
-                        <div class="font-extrabold text-sm text-amber-950 mt-0.5">Своё время</div>
-                        <div class="text-[10px] text-stone-400">Напишу в диалоге</div>
-                    </button>
-                </div>
-            </div>
-
-            <div class="flex gap-3">
-                <button onclick="goToStep(1)" class="w-1/3 py-3.5 bg-stone-200/80 hover:bg-stone-300/80 text-stone-700 font-bold rounded-2xl transition">Назад</button>
-                <button onclick="goToStep(3)" class="w-2/3 py-3.5 bg-amber-700 hover:bg-amber-800 text-white font-extrabold rounded-2xl transition shadow-md">Готово! Далее →</button>
+        <!-- Предпросмотр текста сообщения -->
+        <div class="chat-preview">
+            <div class="chat-preview-title">📱 Предпросмотр твоего ответа:</div>
+            <div class="chat-preview-text" id="preview-text">
+                «Привет! Сегодня всё в силе. Давай встретимся в <b>17:00</b>! ✨»
             </div>
         </div>
 
-        <div id="step-3" class="step-section text-center">
-            <div class="w-20 h-20 bg-rose-100 rounded-full flex items-center justify-center mx-auto mb-3 text-rose-500 text-3xl shadow-inner">
-                💌
-            </div>
+        <button class="action-btn" id="send-btn" onclick="sendTimeTelegram()">
+            <span>Подтвердить и отправить в Telegram</span> 🚀
+        </button>
 
-            <span class="text-xs font-extrabold uppercase tracking-wider text-rose-600 bg-rose-100 px-3 py-1 rounded-full">Главный вопрос</span>
-            <h2 class="text-2xl sm:text-3xl font-black font-rounded text-amber-950 mt-3 mb-2">
-                Ну что, идём? ☕✨
-            </h2>
-            <p class="text-stone-600 text-xs sm:text-sm mb-4">
-                С меня бодрящий напиток, десерт и отличная компания!
-            </p>
-
-            <!-- Order Summary Receipt -->
-            <div class="bg-amber-50/90 border border-amber-200 rounded-2xl p-4 text-left text-xs sm:text-sm space-y-2 mb-5 shadow-inner">
-                <div class="flex justify-between border-b border-amber-200/60 pb-1.5">
-                    <span class="text-stone-500">Напиток:</span>
-                    <span id="summary-coffee" class="font-bold text-amber-950">Бамбл кофе</span>
-                </div>
-                <div class="flex justify-between border-b border-amber-200/60 pb-1.5">
-                    <span class="text-stone-500">Сироп:</span>
-                    <span id="summary-syrup" class="font-bold text-amber-950">Без сиропа</span>
-                </div>
-                <div class="flex justify-between border-b border-amber-200/60 pb-1.5">
-                    <span class="text-stone-500">Десерт:</span>
-                    <span id="summary-dessert" class="font-bold text-amber-950">Круассан</span>
-                </div>
-                <div class="flex justify-between">
-                    <span class="text-stone-500">Когда:</span>
-                    <span id="summary-when" class="font-bold text-rose-600">Завтра в 15:00</span>
-                </div>
-            </div>
-
-            <!-- INTERACTIVE BUTTON CONTAINER WITH GROWING YES AND DODGING NO -->
-            <div id="interactive-btn-area" class="relative min-h-[190px] flex flex-col items-center justify-center gap-3 pt-2">
-                
-                <!-- GROWING PRIMARY ACCEPTANCE BUTTON -->
-                <button id="yes-btn" onclick="acceptInvitation()" class="w-full py-4 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-600 hover:to-teal-700 text-white font-black text-lg sm:text-xl rounded-2xl shadow-xl hover:shadow-2xl z-20">
-                    Да, с удовольствием! 💖
-                </button>
-
-                <!-- CLEARLY VISIBLE REFUSAL BUTTON WITH REAL MEANING OF "NO" -->
-                <button id="no-btn" onmouseover="dodgeButton()" onclick="dodgeButton()" ontouchstart="dodgeButton(event)" class="w-full py-3.5 bg-rose-100 hover:bg-rose-200 text-rose-950 border-2 border-rose-300 font-extrabold text-sm rounded-2xl shadow-md z-10">
-                    К сожалению, не смогу 💔
-                </button>
-
+        <div class="funny-progress" id="progress-box">
+            <div id="progress-text">Запускаем режим сборов... 💄</div>
+            <div class="progress-bar-bg">
+                <div class="progress-bar-fill" id="progress-fill"></div>
             </div>
         </div>
-
-        <div id="step-4" class="step-section text-center">
-            <div class="w-20 h-20 bg-emerald-100 text-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4 text-4xl shadow-md animate-bounce">
-                🎉
-            </div>
-
-            <h2 class="text-2xl sm:text-3xl font-black font-rounded text-amber-950 mb-2">Ура! Договорились! ✨</h2>
-            <p class="text-stone-600 text-sm mb-6">
-                Жду нашей встречи! Нажми на кнопку, чтобы автоматически отправить ответ мне в мессенджер:
-            </p>
-
-            <!-- Telegram / WhatsApp Share Links -->
-            <div class="space-y-3 mb-6">
-                <a id="telegram-link" href="#" target="_blank" class="w-full py-3.5 bg-sky-500 hover:bg-sky-600 text-white font-extrabold text-sm sm:text-base rounded-2xl shadow-md flex items-center justify-center gap-2.5 transition">
-                    <i class="fa-brands fa-telegram text-xl"></i>
-                    <span>Отправить ответ в Telegram</span>
-                </a>
-
-                <a id="whatsapp-link" href="#" target="_blank" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-sm sm:text-base rounded-2xl shadow-md flex items-center justify-center gap-2.5 transition">
-                    <i class="fa-brands fa-whatsapp text-xl"></i>
-                    <span>Отправить ответ в WhatsApp</span>
-                </a>
-            </div>
-
-            <p class="text-xs text-stone-400">Или просто сделай скриншот экрана 📸</p>
-        </div>
-
     </div>
 
     <script>
-        // State variables
-        let currentStep = 1;
-        let tomorrowFormatted = '';
-        let selections = {
-            coffee: 'Бамбл кофе',
-            syrup: 'Без сиропа',
-            dessert: 'Круассан',
-            time: '15:00'
-        };
+        let selectedTime = '17:00';
 
-        let noButtonDodgeCount = 0;
-        let yesScale = 1.0;
-        
-        // High-meaning refusal phrases
-        const noPhrases = [
-            "К сожалению, не смогу 💔",
-            "Нет, в другой раз 😔",
-            "Извини, не получится... 💔",
-            "Ой, кажется кнопка уплывает! 😅",
-            "Хм, может всё-таки кофе? ☕",
-            "Кнопка 'Да' растёт! Нажми её! ✨",
-            "Нажми 'Да, с удовольствием!' 💖"
-        ];
+        function selectTime(time, element) {
+            selectedTime = time;
+            document.getElementById('custom-time').style.display = 'none';
+            document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
 
-        // Automatic Calculation of STRICT TOMORROW Date
-        window.addEventListener('DOMContentLoaded', () => {
-            const today = new Date();
-            const tomorrow = new Date(today);
-            tomorrow.setDate(today.getDate() + 1);
+            updatePreviewText(time);
+            triggerConfetti();
+            runProgressBar(`Отлично, время ${time} зафиксировано! Начинаем собираться 😉`);
+        }
 
-            const options = { weekday: 'long', day: 'numeric', month: 'long' };
-            tomorrowFormatted = tomorrow.toLocaleDateString('ru-RU', options);
+        function enableCustomTime(element) {
+            document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active'));
+            element.classList.add('active');
             
-            // Capitalize first letter (e.g., "Завтра (Среда, 7 октября)")
-            tomorrowFormatted = tomorrowFormatted.charAt(0).toUpperCase() + tomorrowFormatted.slice(1);
-
-            document.getElementById('tomorrow-date-display').innerText = `Завтра (${tomorrowFormatted})`;
-        });
-
-        // Navigation between steps
-        function goToStep(stepNumber) {
-            document.querySelectorAll('.step-section').forEach(el => {
-                el.classList.remove('active');
-            });
-
-            currentStep = stepNumber;
-            const target = document.getElementById(`step-${stepNumber}`);
-            if (target) {
-                target.classList.add('active');
-            }
-
-            if (stepNumber === 3) {
-                updateSummary();
-            }
-        }
-
-        // Option Selection Handler
-        function selectOption(category, value, emoji, customBgGradient = null) {
-            selections[category] = value;
-
-            // Highlight active button in category
-            const parent = event.currentTarget.parentElement;
-            parent.querySelectorAll('.select-option').forEach(btn => btn.classList.remove('active'));
-            event.currentTarget.classList.add('active');
-
-            // Change Cup Gradient color dynamically
-            if (category === 'coffee' && customBgGradient) {
-                const cupContainer = document.getElementById('cup-icon-container');
-                cupContainer.style.background = customBgGradient;
-            }
-
-            // Live preview update
-            document.getElementById('order-preview-text').innerText = 
-                `${selections.coffee} ${selections.syrup !== 'Без сиропа' ? '+ ' + selections.syrup : ''} + ${selections.dessert}`;
-        }
-
-        // Summary Updater
-        function updateSummary() {
-            document.getElementById('summary-coffee').innerText = selections.coffee;
-            document.getElementById('summary-syrup').innerText = selections.syrup;
-            document.getElementById('summary-dessert').innerText = selections.dessert;
-            document.getElementById('summary-when').innerText = `Завтра (${tomorrowFormatted}), в ${selections.time}`;
-        }
-
-        // SMOOTH & NOTICEABLE GROWING YES BUTTON + DODGING NO BUTTON
-        function dodgeButton(e) {
-            if (e) {
-                e.preventDefault();
-            }
-
-            const noBtn = document.getElementById('no-btn');
-            const yesBtn = document.getElementById('yes-btn');
+            const input = document.getElementById('custom-time');
+            input.style.display = 'block';
+            input.focus();
             
-            noButtonDodgeCount++;
-
-            // 1. UPDATE TEXT ON NO BUTTON
-            if (noButtonDodgeCount < noPhrases.length) {
-                noBtn.innerText = noPhrases[noButtonDodgeCount];
-            } else {
-                noBtn.innerText = "Ладно, сдаюсь! 💖";
-            }
-
-            // 2. GROW YES BUTTON NOTICEABLY (+20% per attempt up to 2.4x)
-            yesScale += 0.22;
-            if (yesScale > 2.4) yesScale = 2.4;
-            
-            yesBtn.style.transform = `scale(${yesScale})`;
-            yesBtn.style.zIndex = '30';
-
-            // 3. DODGE NO BUTTON TO RANDOM OFFSET
-            const maxOffset = 130;
-            const randomX = (Math.random() - 0.5) * (maxOffset * 2);
-            const randomY = (Math.random() - 0.5) * 100;
-
-            noBtn.style.transform = `translate(${randomX}px, ${randomY}px)`;
+            selectedTime = input.value || 'указанное время';
+            updatePreviewText(selectedTime);
         }
 
-        // Final acceptance & Confetti animation
-// Final acceptance & Confetti animation
-        function acceptInvitation() {
+        function updateCustomTime(val) {
+            selectedTime = val || 'указанное время';
+            updatePreviewText(selectedTime);
+        }
+
+        function updatePreviewText(time) {
+            document.getElementById('preview-text').innerHTML = 
+                `«Привет! Сегодня всё в силе. Давай встретимся в <b>${time}</b>! ✨»`;
+        }
+
+        function triggerConfetti() {
             confetti({
-                particleCount: 120,
-                spread: 75,
-                origin: { y: 0.6 }
+                particleCount: 35,
+                spread: 50,
+                origin: { y: 0.75 }
             });
-        
+        }
+
+        function runProgressBar(text) {
+            const progressBox = document.getElementById('progress-box');
+            const progressFill = document.getElementById('progress-fill');
+            const progressText = document.getElementById('progress-text');
+
+            progressBox.style.display = 'block';
+            progressFill.style.width = '0%';
+
             setTimeout(() => {
-                confetti({ particleCount: 70, angle: 60, spread: 55, origin: { x: 0 } });
-                confetti({ particleCount: 70, angle: 120, spread: 55, origin: { x: 1 } });
-            }, 250);
-        
-            // Construct formatted Messenger Message
-            const textMessage = `Привет! ☕ Я с удовольствием пойду с тобой на кофе!\n\nМой выбор:\n• Напиток: ${selections.coffee}\n• Сироп: ${selections.syrup}\n• Десерт: ${selections.dessert}\n• Когда: Завтра (${tomorrowFormatted}) в ${selections.time}`;
-            const encodedText = encodeURIComponent(textMessage);
-        
-            // ВМЕСТО https://t.me/ СТАВИМ ПРОТОКОЛ tg://msg_url ДЛЯ ОТКРЫТИЯ ПРИЛОЖЕНИЯ
-            document.getElementById('telegram-link').href = `tg://msg_url?url=&text=${encodedText}`;
-            document.getElementById('whatsapp-link').href = `https://api.whatsapp.com/send?text=${encodedText}`;
-        
-            goToStep(4);
+                progressFill.style.width = '100%';
+                progressText.innerText = text;
+            }, 100);
+        }
+
+        function sendTimeTelegram() {
+            const text = `Привет! ☕ Я закрутилась, но сегодня всё в силе!\n\nДавай встретимся сегодня в: ${selectedTime}! Жду тебя 😉`;
+            const encodedText = encodeURIComponent(text);
+
+            const tgAppUrl = `tg://msg_url?url=&text=${encodedText}`;
+            const tgWebUrl = `https://t.me/share/url?url=&text=${encodedText}`;
+
+            window.location.href = tgAppUrl;
+
+            setTimeout(() => {
+                window.open(tgWebUrl, '_blank');
+            }, 1000);
         }
     </script>
 </body>
