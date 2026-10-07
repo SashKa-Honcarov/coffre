@@ -7,13 +7,13 @@
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
         :root {
-            --bg-color: #fdf8f5;
-            --card-bg: #ffffff;
-            --accent: #ff6b6b;
-            --accent-hover: #ff5252;
-            --text-main: #2d3436;
-            --text-sub: #636e72;
-            --coffee-orange: #ff9f43;
+            --primary-gradient: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
+            --accent-orange: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
+            --button-gradient: linear-gradient(135deg, #ff512f 0%, #dd2476 100%);
+            --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
+            --card-bg: rgba(255, 255, 255, 0.95);
+            --text-dark: #2c3e50;
+            --text-muted: #7f8c8d;
         }
 
         * {
@@ -24,165 +24,220 @@
         }
 
         body {
-            background-color: var(--bg-color);
-            color: var(--text-main);
+            background: #f8edeb;
+            background-image: radial-gradient(#fcd5ce 1px, transparent 1px);
+            background-size: 20px 20px;
+            color: var(--text-dark);
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 20px;
+            padding: 16px;
         }
 
         .container {
             background: var(--card-bg);
-            border-radius: 28px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 32px;
+            box-shadow: 0 20px 50px rgba(221, 36, 118, 0.12), 0 10px 20px rgba(0, 0, 0, 0.04);
             max-width: 420px;
             width: 100%;
-            padding: 28px 20px;
+            padding: 32px 24px;
             text-align: center;
             position: relative;
-            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.8);
+        }
+
+        .header-icon {
+            font-size: 3.2rem;
+            margin-bottom: 8px;
+            display: inline-block;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-8px); }
         }
 
         .status-badge {
-            display: inline-block;
-            background: #ffeaa7;
-            color: #d63031;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: #fff3bf;
+            color: #d9480f;
             font-weight: 700;
-            font-size: 0.85rem;
-            padding: 6px 16px;
+            font-size: 0.82rem;
+            padding: 6px 14px;
             border-radius: 20px;
             margin-bottom: 16px;
-            animation: pulse 2s infinite;
+            box-shadow: 0 2px 8px rgba(217, 72, 15, 0.15);
         }
 
-        @keyframes pulse {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background-color: #f76707;
+            border-radius: 50%;
+            animation: blink 1.2s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
         }
 
         h1 {
-            font-size: 1.5rem;
+            font-size: 1.65rem;
+            font-weight: 800;
             margin-bottom: 8px;
-            color: #2d3436;
+            background: linear-gradient(135deg, #2c3e50, #dd2476);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
         }
 
         p.subtitle {
             font-size: 0.95rem;
-            color: var(--text-sub);
-            margin-bottom: 20px;
-            line-height: 1.4;
+            color: var(--text-muted);
+            margin-bottom: 22px;
+            line-height: 1.45;
         }
 
         .order-card {
-            background: #fff5f0;
-            border: 2px dashed #ffbe76;
-            border-radius: 18px;
-            padding: 14px;
-            margin-bottom: 20px;
+            background: linear-gradient(135deg, #fff0f3 0%, #fff5f5 100%);
+            border: 1.5px dashed #ffb3c1;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 22px;
             text-align: left;
+            position: relative;
         }
 
         .order-card h3 {
-            font-size: 0.8rem;
-            color: #e056fd;
+            font-size: 0.75rem;
+            color: #ff4d6d;
             text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 6px;
+            letter-spacing: 1.2px;
+            margin-bottom: 10px;
+            font-weight: 800;
         }
 
         .order-item {
             display: flex;
             align-items: center;
-            gap: 8px;
-            font-size: 0.95rem;
-            font-weight: 600;
-            color: #30336b;
-            margin-bottom: 4px;
+            gap: 10px;
+            font-size: 0.98rem;
+            font-weight: 700;
+            color: #590d22;
+            margin-bottom: 6px;
+        }
+
+        .order-item:last-child {
+            margin-bottom: 0;
         }
 
         .time-picker-title {
-            font-weight: 700;
-            margin-bottom: 12px;
+            font-weight: 800;
+            margin-bottom: 14px;
             font-size: 0.95rem;
+            color: #2c3e50;
         }
 
         .time-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
-            margin-bottom: 16px;
+            margin-bottom: 18px;
         }
 
         .time-btn {
-            background: #f1f2f6;
-            border: 2px solid transparent;
-            border-radius: 14px;
-            padding: 12px;
-            font-size: 0.95rem;
-            font-weight: 700;
-            color: #2f3542;
-            cursor: pointer;
-            transition: all 0.2s ease;
-        }
-
-        .time-btn:hover, .time-btn.active {
-            background: #ffffff;
-            border-color: var(--accent);
-            color: var(--accent);
-            box-shadow: 0 4px 12px rgba(255,107,107,0.2);
-        }
-
-        /* Симуляция чата / Предпросмотр сообщения */
-        .chat-preview {
-            background: #e1f5fe;
+            background: #f8f9fa;
+            border: 2px solid #edf2f7;
             border-radius: 16px;
-            padding: 12px 16px;
-            margin-bottom: 20px;
-            text-align: left;
-            position: relative;
-            border-left: 4px solid #0288d1;
-        }
-
-        .chat-preview-title {
-            font-size: 0.75rem;
-            color: #0288d1;
+            padding: 14px 10px;
+            font-size: 1rem;
             font-weight: 700;
-            text-transform: uppercase;
-            margin-bottom: 4px;
+            color: #4a5568;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
         }
 
-        .chat-preview-text {
-            font-size: 0.9rem;
-            color: #01579b;
-            line-height: 1.3;
+        .time-btn:hover {
+            border-color: #ff758c;
+            color: #ff4d6d;
+            transform: translateY(-2px);
+        }
+
+        .time-btn.active {
+            background: #ffffff;
+            border-color: #ff4d6d;
+            color: #ff4d6d;
+            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.25);
+            transform: translateY(-2px) scale(1.02);
         }
 
         .custom-time-input {
             display: none;
             width: 100%;
-            padding: 10px;
-            margin-bottom: 14px;
-            border: 2px solid var(--accent);
-            border-radius: 12px;
+            padding: 12px;
+            margin-bottom: 16px;
+            border: 2px solid #ff758c;
+            border-radius: 14px;
             font-size: 1rem;
+            font-weight: 700;
             text-align: center;
             outline: none;
+            box-shadow: 0 4px 12px rgba(255, 117, 140, 0.15);
+            color: #2c3e50;
+        }
+
+        .chat-preview {
+            background: linear-gradient(135deg, #e3f2fd 0%, #e1f5fe 100%);
+            border-radius: 18px;
+            padding: 14px 16px;
+            margin-bottom: 22px;
+            text-align: left;
+            position: relative;
+            border-left: 4px solid #0288d1;
+            box-shadow: 0 4px 12px rgba(2, 136, 209, 0.08);
+        }
+
+        .chat-preview-title {
+            font-size: 0.72rem;
+            color: #0288d1;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            margin-bottom: 6px;
+        }
+
+        .chat-preview-text {
+            font-size: 0.92rem;
+            color: #01579b;
+            line-height: 1.4;
+            font-weight: 500;
+        }
+
+        .chat-preview-text b {
+            color: #d81b60;
+            font-size: 1.05rem;
         }
 
         .action-btn {
-            background: linear-gradient(135deg, #ff6b6b, #ff8e53);
+            background: var(--button-gradient);
             color: white;
             border: none;
             width: 100%;
-            padding: 16px;
-            border-radius: 16px;
-            font-size: 1.05rem;
-            font-weight: 700;
+            padding: 18px;
+            border-radius: 18px;
+            font-size: 1.08rem;
+            font-weight: 800;
             cursor: pointer;
-            box-shadow: 0 8px 20px rgba(255,107,107,0.35);
+            box-shadow: 0 10px 25px rgba(221, 36, 118, 0.35);
             transition: transform 0.2s, box-shadow 0.2s;
             display: flex;
             justify-content: center;
@@ -191,66 +246,76 @@
             text-decoration: none;
         }
 
+        .action-btn:hover {
+            box-shadow: 0 12px 30px rgba(221, 36, 118, 0.45);
+            transform: translateY(-2px);
+        }
+
         .action-btn:active {
-            transform: scale(0.98);
+            transform: translateY(1px);
         }
 
         .funny-progress {
-            display: none;
-            margin-top: 16px;
+            display: block;
+            margin-top: 18px;
             background: #f8f9fa;
-            border-radius: 14px;
-            padding: 12px;
-            font-size: 0.85rem;
-            color: #57606f;
+            border-radius: 16px;
+            padding: 14px;
+            font-size: 0.88rem;
+            color: #4a5568;
+            border: 1px solid #edf2f7;
         }
 
         .progress-bar-bg {
-            background: #dfe4ea;
-            height: 8px;
-            border-radius: 4px;
+            background: #e2e8f0;
+            height: 10px;
+            border-radius: 6px;
             overflow: hidden;
-            margin-top: 6px;
+            margin-top: 8px;
         }
 
         .progress-bar-fill {
-            background: #2ed573;
+            background: linear-gradient(90deg, #ff758c, #2ed573);
             height: 100%;
-            width: 0%;
-            transition: width 1.5s ease-in-out;
+            width: 100%;
+            transition: width 0.8s ease-in-out;
+            border-radius: 6px;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <div class="status-badge">⚠️ Статус: Время не подтверждено!</div>
+        <div class="header-icon">☕✨</div>
+        <div class="status-badge">
+            <span class="status-dot"></span>
+            <span>Статус: Время не подтверждено!</span>
+        </div>
         
         <h1>Так, на сегодня всё в силе? 😏</h1>
-        <p class="subtitle">Ты обещала написать время, но кажется закрутилась! Твой кофе и круассан уже волнуются ☕🥐</p>
+        <p class="subtitle">Ты обещала написать время, но кажется закрутилась! Твой кофе и круассан уже волнуются 🥐☕</p>
 
         <div class="order-card">
             <h3>Твой заказ ожидает подтверждения:</h3>
-            <div class="order-item">🍊 Бамбл / Мятное смузи + 🥐 Круассан</div>
-            <div class="order-item">📍 Отличное настроение и компания</div>
+            <div class="order-item">🍊 Бамбл кофе + 🥐 Круассан</div>
+            <div class="order-item">📍 Отличное настроение и приятный вечер</div>
         </div>
 
         <div class="time-picker-title">Жми на удобное время ниже: 👇</div>
 
         <div class="time-grid">
-            <button class="time-btn active" onclick="selectTime('17:00', this)">18:00 🕔</button>
-            <button class="time-btn" onclick="selectTime('18:00', this)">19:00 🕕</button>
-            <button class="time-btn" onclick="selectTime('19:00', this)">20:00 🕖</button>
+            <button class="time-btn active" onclick="selectTime('18:00', this)">18:00 🕕</button>
+            <button class="time-btn" onclick="selectTime('19:00', this)">19:00 🕖</button>
+            <button class="time-btn" onclick="selectTime('20:00', this)">20:00 🕗</button>
             <button class="time-btn" onclick="enableCustomTime(this)">Свой вариант ✏️</button>
         </div>
 
         <input type="text" id="custom-time" class="custom-time-input" placeholder="Например: 19:30" oninput="updateCustomTime(this.value)">
 
-        <!-- Предпросмотр текста сообщения -->
         <div class="chat-preview">
-            <div class="chat-preview-title">📱 Предпросмотр твоего ответа:</div>
+            <div class="chat-preview-title">📱 Предпросмотр ответа для Telegram:</div>
             <div class="chat-preview-text" id="preview-text">
-                «Привет! Сегодня всё в силе. Давай встретимся в <b>17:00</b>! ✨»
+                «Привет! Сегодня всё в силе. Давай встретимся в <b>18:00</b>! ✨»
             </div>
         </div>
 
@@ -259,7 +324,7 @@
         </button>
 
         <div class="funny-progress" id="progress-box">
-            <div id="progress-text">Запускаем режим сборов... 💄</div>
+            <div id="progress-text">Отлично, время 18:00 зафиксировано! Начинаем собираться 😉</div>
             <div class="progress-bar-bg">
                 <div class="progress-bar-fill" id="progress-fill"></div>
             </div>
@@ -267,7 +332,7 @@
     </div>
 
     <script>
-        let selectedTime = '17:00';
+        let selectedTime = '18:00';
 
         function selectTime(time, element) {
             selectedTime = time;
@@ -311,13 +376,10 @@
         }
 
         function runProgressBar(text) {
-            const progressBox = document.getElementById('progress-box');
             const progressFill = document.getElementById('progress-fill');
             const progressText = document.getElementById('progress-text');
 
-            progressBox.style.display = 'block';
             progressFill.style.width = '0%';
-
             setTimeout(() => {
                 progressFill.style.width = '100%';
                 progressText.innerText = text;
