@@ -3,402 +3,573 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Жду тебя сегодня! ☕✨</title>
+    <title>Coffee Story ✨</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
-        :root {
-            --primary-gradient: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
-            --accent-orange: linear-gradient(135deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);
-            --button-gradient: linear-gradient(135deg, #ff512f 0%, #dd2476 100%);
-            --bg-gradient: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%);
-            --card-bg: rgba(255, 255, 255, 0.95);
-            --text-dark: #2c3e50;
-            --text-muted: #7f8c8d;
-        }
-
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            user-select: none;
         }
 
         body {
-            background: #f8edeb;
-            background-image: radial-gradient(#fcd5ce 1px, transparent 1px);
-            background-size: 20px 20px;
-            color: var(--text-dark);
+            background-color: #0b0c10;
+            color: #ffffff;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
-            padding: 16px;
+            overflow: hidden;
         }
 
-        .container {
-            background: var(--card-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 32px;
-            box-shadow: 0 20px 50px rgba(221, 36, 118, 0.12), 0 10px 20px rgba(0, 0, 0, 0.04);
-            max-width: 420px;
+        /* Cinema Viewport Container */
+        .story-container {
             width: 100%;
-            padding: 32px 24px;
-            text-align: center;
+            max-width: 420px;
+            height: 100vh;
+            max-height: 850px;
+            background: linear-gradient(180deg, #1f1c2c 0%, #928dab 100%);
             position: relative;
-            border: 1px solid rgba(255, 255, 255, 0.8);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
         }
 
-        .header-icon {
-            font-size: 3.2rem;
-            margin-bottom: 8px;
-            display: inline-block;
-            animation: float 3s ease-in-out infinite;
+        @media (min-width: 450px) {
+            .story-container {
+                border-radius: 32px;
+                height: 90vh;
+            }
         }
 
-        @keyframes float {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-8px); }
+        /* Progress Bar Top */
+        .progress-bars {
+            position: absolute;
+            top: 16px;
+            left: 16px;
+            right: 16px;
+            display: flex;
+            gap: 6px;
+            z-index: 50;
         }
 
-        .status-badge {
-            display: inline-flex;
+        .bar-bg {
+            flex: 1;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 2px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            width: 0%;
+            background: #ffffff;
+            transition: width 0.1s linear;
+        }
+
+        /* Audio Control */
+        .sound-toggle {
+            position: absolute;
+            top: 30px;
+            right: 20px;
+            z-index: 50;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            cursor: pointer;
+            display: flex;
             align-items: center;
             gap: 6px;
-            background: #fff3bf;
-            color: #d9480f;
-            font-weight: 700;
-            font-size: 0.82rem;
-            padding: 6px 14px;
+        }
+
+        /* Particles Canvas Background */
+        #particles-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        /* Scene Base Style */
+        .scene {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            padding: 80px 24px 40px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            text-align: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.6s ease, transform 0.6s ease;
+            transform: scale(0.95);
+            z-index: 10;
+        }
+
+        .scene.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+
+        /* Typography & Buttons */
+        .scene-badge {
+            background: rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(8px);
+            padding: 6px 16px;
             border-radius: 20px;
-            margin-bottom: 16px;
-            box-shadow: 0 2px 8px rgba(217, 72, 15, 0.15);
-        }
-
-        .status-dot {
-            width: 8px;
-            height: 8px;
-            background-color: #f76707;
-            border-radius: 50%;
-            animation: blink 1.2s infinite;
-        }
-
-        @keyframes blink {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.3; }
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            border: 1px solid rgba(255, 255, 255, 0.25);
         }
 
         h1 {
-            font-size: 1.65rem;
+            font-size: 2rem;
             font-weight: 800;
-            margin-bottom: 8px;
-            background: linear-gradient(135deg, #2c3e50, #dd2476);
+            margin-top: 16px;
+            line-height: 1.25;
+            background: linear-gradient(135deg, #ffffff 0%, #ffd1ff 100%);
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
         }
 
-        p.subtitle {
-            font-size: 0.95rem;
-            color: var(--text-muted);
-            margin-bottom: 22px;
-            line-height: 1.45;
-        }
-
-        .order-card {
-            background: linear-gradient(135deg, #fff0f3 0%, #fff5f5 100%);
-            border: 1.5px dashed #ffb3c1;
-            border-radius: 20px;
-            padding: 16px;
-            margin-bottom: 22px;
-            text-align: left;
-            position: relative;
-        }
-
-        .order-card h3 {
-            font-size: 0.75rem;
-            color: #ff4d6d;
-            text-transform: uppercase;
-            letter-spacing: 1.2px;
-            margin-bottom: 10px;
-            font-weight: 800;
-        }
-
-        .order-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.98rem;
-            font-weight: 700;
-            color: #590d22;
-            margin-bottom: 6px;
-        }
-
-        .order-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .time-picker-title {
-            font-weight: 800;
-            margin-bottom: 14px;
-            font-size: 0.95rem;
-            color: #2c3e50;
-        }
-
-        .time-grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 18px;
-        }
-
-        .time-btn {
-            background: #f8f9fa;
-            border: 2px solid #edf2f7;
-            border-radius: 16px;
-            padding: 14px 10px;
+        p.desc {
             font-size: 1rem;
-            font-weight: 700;
-            color: #4a5568;
-            cursor: pointer;
-            transition: all 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 6px;
+            color: rgba(255, 255, 255, 0.85);
+            margin-top: 12px;
+            line-height: 1.5;
         }
 
-        .time-btn:hover {
-            border-color: #ff758c;
-            color: #ff4d6d;
-            transform: translateY(-2px);
-        }
-
-        .time-btn.active {
-            background: #ffffff;
-            border-color: #ff4d6d;
-            color: #ff4d6d;
-            box-shadow: 0 8px 20px rgba(255, 77, 109, 0.25);
-            transform: translateY(-2px) scale(1.02);
-        }
-
-        .custom-time-input {
-            display: none;
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 16px;
-            border: 2px solid #ff758c;
-            border-radius: 14px;
-            font-size: 1rem;
-            font-weight: 700;
-            text-align: center;
-            outline: none;
-            box-shadow: 0 4px 12px rgba(255, 117, 140, 0.15);
-            color: #2c3e50;
-        }
-
-        .chat-preview {
-            background: linear-gradient(135deg, #e3f2fd 0%, #e1f5fe 100%);
-            border-radius: 18px;
-            padding: 14px 16px;
-            margin-bottom: 22px;
-            text-align: left;
-            position: relative;
-            border-left: 4px solid #0288d1;
-            box-shadow: 0 4px 12px rgba(2, 136, 209, 0.08);
-        }
-
-        .chat-preview-title {
-            font-size: 0.72rem;
-            color: #0288d1;
-            font-weight: 800;
-            text-transform: uppercase;
-            letter-spacing: 0.8px;
-            margin-bottom: 6px;
-        }
-
-        .chat-preview-text {
-            font-size: 0.92rem;
-            color: #01579b;
-            line-height: 1.4;
-            font-weight: 500;
-        }
-
-        .chat-preview-text b {
-            color: #d81b60;
-            font-size: 1.05rem;
-        }
-
-        .action-btn {
-            background: var(--button-gradient);
+        .main-btn {
+            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
             color: white;
             border: none;
             width: 100%;
             padding: 18px;
-            border-radius: 18px;
-            font-size: 1.08rem;
-            font-weight: 800;
+            border-radius: 20px;
+            font-size: 1.05rem;
+            font-weight: 700;
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(221, 36, 118, 0.35);
+            box-shadow: 0 10px 25px rgba(255, 117, 140, 0.4);
             transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            display: block;
+        }
+
+        .main-btn:active {
+            transform: scale(0.97);
+        }
+
+        /* Choice Cards for Scene 2 */
+        .choices-grid {
             display: flex;
+            flex-direction: column;
+            gap: 12px;
+            width: 100%;
+            margin-top: 20px;
+        }
+
+        .choice-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(12px);
+            border: 1.5px solid rgba(255, 255, 255, 0.2);
+            border-radius: 18px;
+            padding: 16px;
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            text-align: left;
+        }
+
+        .choice-card:hover, .choice-card.selected {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: #ff758c;
+            transform: translateX(4px);
+        }
+
+        .choice-icon {
+            font-size: 1.8rem;
+        }
+
+        .choice-info h4 {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .choice-info p {
+            font-size: 0.8rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 2px;
+        }
+
+        /* Scratch Card Area for Scene 3 */
+        .scratch-container {
+            position: relative;
+            width: 280px;
+            height: 140px;
+            margin: 20px auto;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .scratch-secret {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #ffeaa7 0%, #ff7675 100%);
+            display: flex;
+            flex-direction: column;
             justify-content: center;
             align-items: center;
-            gap: 10px;
-            text-decoration: none;
+            color: #2d3436;
+            padding: 12px;
         }
 
-        .action-btn:hover {
-            box-shadow: 0 12px 30px rgba(221, 36, 118, 0.45);
-            transform: translateY(-2px);
+        .scratch-secret h3 {
+            font-size: 1.1rem;
+            font-weight: 800;
         }
 
-        .action-btn:active {
-            transform: translateY(1px);
+        .scratch-secret p {
+            font-size: 0.85rem;
+            margin-top: 4px;
+            font-weight: 600;
         }
 
-        .funny-progress {
-            display: block;
-            margin-top: 18px;
-            background: #f8f9fa;
-            border-radius: 16px;
-            padding: 14px;
-            font-size: 0.88rem;
-            color: #4a5568;
-            border: 1px solid #edf2f7;
-        }
-
-        .progress-bar-bg {
-            background: #e2e8f0;
-            height: 10px;
-            border-radius: 6px;
-            overflow: hidden;
-            margin-top: 8px;
-        }
-
-        .progress-bar-fill {
-            background: linear-gradient(90deg, #ff758c, #2ed573);
-            height: 100%;
+        #scratch-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
-            transition: width 0.8s ease-in-out;
-            border-radius: 6px;
+            height: 100%;
+            cursor: pointer;
+            touch-action: none;
+        }
+
+        /* Ticket Final Screen - FIXED STYLES */
+        .ticket-box {
+            background: rgba(255, 255, 255, 0.95);
+            color: #2d3436;
+            border-radius: 24px;
+            padding: 24px 20px;
+            width: 100%;
+            text-align: left;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
+            margin: 20px 0;
+        }
+
+        .ticket-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 0.9rem;
+        }
+
+        .ticket-row span.label {
+            color: #636e72;
+            font-weight: 600;
+            white-space: nowrap;
+            flex-shrink: 0;
+        }
+
+        .ticket-row span.val {
+            font-weight: 800;
+            color: #d63031;
+            text-align: right;
+            word-break: break-word;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div class="header-icon">☕✨</div>
-        <div class="status-badge">
-            <span class="status-dot"></span>
-            <span>Статус: Время не подтверждено!</span>
-        </div>
-        
-        <h1>Так, на сегодня всё в силе? 😏</h1>
-        <p class="subtitle">Ты обещала написать время, но кажется закрутилась! Твой кофе и круассан уже волнуются 🥐☕</p>
-
-        <div class="order-card">
-            <h3>Твой заказ ожидает подтверждения:</h3>
-            <div class="order-item">🍊 Бамбл кофе + 🥐 Круассан</div>
-            <div class="order-item">📍 Отличное настроение и приятный вечер</div>
+    <div class="story-container">
+        <!-- Progress bar header -->
+        <div class="progress-bars">
+            <div class="bar-bg"><div class="bar-fill" id="bar-0"></div></div>
+            <div class="bar-bg"><div class="bar-fill" id="bar-1"></div></div>
+            <div class="bar-bg"><div class="bar-fill" id="bar-2"></div></div>
+            <div class="bar-bg"><div class="bar-fill" id="bar-3"></div></div>
         </div>
 
-        <div class="time-picker-title">Жми на удобное время ниже: 👇</div>
-
-        <div class="time-grid">
-            <button class="time-btn active" onclick="selectTime('18:00', this)">18:00 🕕</button>
-            <button class="time-btn" onclick="selectTime('19:00', this)">19:00 🕖</button>
-            <button class="time-btn" onclick="selectTime('20:00', this)">20:00 🕗</button>
-            <button class="time-btn" onclick="enableCustomTime(this)">Свой вариант ✏️</button>
-        </div>
-
-        <input type="text" id="custom-time" class="custom-time-input" placeholder="Например: 19:30" oninput="updateCustomTime(this.value)">
-
-        <div class="chat-preview">
-            <div class="chat-preview-title">📱 Предпросмотр ответа для Telegram:</div>
-            <div class="chat-preview-text" id="preview-text">
-                «Привет! Сегодня всё в силе. Давай встретимся в <b>18:00</b>! ✨»
-            </div>
-        </div>
-
-        <button class="action-btn" id="send-btn" onclick="sendTimeTelegram()">
-            <span>Подтвердить и отправить в Telegram</span> 🚀
+        <button class="sound-toggle" onclick="toggleSound()">
+            <span id="sound-icon">🎵</span> <span id="sound-text">Звук</span>
         </button>
 
-        <div class="funny-progress" id="progress-box">
-            <div id="progress-text">Отлично, время 18:00 зафиксировано! Начинаем собираться 😉</div>
-            <div class="progress-bar-bg">
-                <div class="progress-bar-fill" id="progress-fill"></div>
+        <canvas id="particles-canvas"></canvas>
+
+        <!-- SCENE 0: Intro -->
+        <div class="scene active" id="scene-0">
+            <div class="scene-badge">Interactive Story 🎬</div>
+            <div>
+                <h1>Кофейная История ✨</h1>
+                <p class="desc">У меня есть идея на вечер, но сюжет зависит только от твоего выбора!</p>
             </div>
+            <button class="main-btn" onclick="startStory()">Смотреть историю 🚀</button>
+        </div>
+
+        <!-- SCENE 1: Choose Vibe -->
+        <div class="scene" id="scene-1">
+            <div class="scene-badge">Шаг 1 из 3</div>
+            <div>
+                <h1>Какой вайб выберем?</h1>
+                <p class="desc">Выбери настроение нашего сегодняшнего вечера:</p>
+
+                <div class="choices-grid">
+                    <div class="choice-card" onclick="selectVibe('Уютный & Ламповый 🕯️', this)">
+                        <div class="choice-icon">🕯️</div>
+                        <div class="choice-info">
+                            <h4>Уютный & Ламповый</h4>
+                            <p>Тихий столик, тёплый кофе и долгие разговоры</p>
+                        </div>
+                    </div>
+                    <div class="choice-card" onclick="selectVibe('Гуляем & Кофе на вынос 🌆', this)">
+                        <div class="choice-icon">🌆</div>
+                        <div class="choice-info">
+                            <h4>Гуляем & Кофе на вынос</h4>
+                            <p>Бамбл с круасаном в руки и красивые мы на прогулке</p>
+                        </div>
+                    </div>
+                    <div class="choice-card" onclick="selectVibe('Секретный маршрут & Импровизация 🎭', this)">
+                        <div class="choice-icon">🎭</div>
+                        <div class="choice-info">
+                            <h4>Секретный маршрут & Импровизация</h4>
+                            <p>Никаких планов — выбираем направление на ходу и смотрим, куда приведёт вечер</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="main-btn" onclick="nextScene(2)">Далее ✨</button>
+        </div>
+
+        <!-- SCENE 2: Scratch Card Bonus -->
+        <div class="scene" id="scene-2">
+            <div class="scene-badge">Шаг 2 из 3</div>
+            <div>
+                <h1>Секретный бонус 🎁</h1>
+                <p class="desc">Стри пальцем или мышкой защитный слой, чтобы открыть свой подарок:</p>
+
+                <div class="scratch-container">
+                    <div class="scratch-secret">
+                        <h3>🎉 Твой Бонус:</h3>
+                        <p>«Любой десерт на выбор!» 🍰✨</p>
+                    </div>
+                    <canvas id="scratch-canvas"></canvas>
+                </div>
+            </div>
+            <button class="main-btn" onclick="nextScene(3)">Получить билет 🎟️</button>
+        </div>
+
+        <!-- SCENE 3: Final Ticket & Telegram -->
+        <div class="scene" id="scene-3">
+            <div class="scene-badge">Финал 🎬</div>
+            <div>
+                <h1>Твой Кино-Билет 🎟️</h1>
+                <p class="desc">Всё готово для нашего идеального вечера!</p>
+
+                <div class="ticket-box">
+                    <div class="ticket-row">
+                        <span class="label">Событие:</span>
+                        <span class="val">Кофейный вечер</span>
+                    </div>
+                    <div class="ticket-row">
+                        <span class="label">Выбранный вайб:</span>
+                        <span class="val" id="ticket-vibe">Уютный 🕯️</span>
+                    </div>
+                    <div class="ticket-row">
+                        <span class="label">Бонус:</span>
+                        <span class="val">Десерт 🍰</span>
+                    </div>
+                    <div class="ticket-row">
+                        <span class="label">Когда:</span>
+                        <span class="val">Сегодня вечер</span>
+                    </div>
+                </div>
+            </div>
+            <button class="main-btn" onclick="sendTelegram()">Отправить ответ в Telegram 🚀</button>
         </div>
     </div>
 
+    <!-- Ambient Audio -->
+    <audio id="bg-audio" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3"></audio>
+
     <script>
-        let selectedTime = '18:00';
+        let currentScene = 0;
+        let selectedVibe = 'Уютный & Ламповый 🕯️';
+        let audioPlaying = false;
+        const bgAudio = document.getElementById('bg-audio');
 
-        function selectTime(time, element) {
-            selectedTime = time;
-            document.getElementById('custom-time').style.display = 'none';
-            document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active'));
-            element.classList.add('active');
-
-            updatePreviewText(time);
-            triggerConfetti();
-            runProgressBar(`Отлично, время ${time} зафиксировано! Начинаем собираться 😉`);
-        }
-
-        function enableCustomTime(element) {
-            document.querySelectorAll('.time-btn').forEach(btn => btn.classList.remove('active'));
-            element.classList.add('active');
-            
-            const input = document.getElementById('custom-time');
-            input.style.display = 'block';
-            input.focus();
-            
-            selectedTime = input.value || 'указанное время';
-            updatePreviewText(selectedTime);
-        }
-
-        function updateCustomTime(val) {
-            selectedTime = val || 'указанное время';
-            updatePreviewText(selectedTime);
-        }
-
-        function updatePreviewText(time) {
-            document.getElementById('preview-text').innerHTML = 
-                `«Привет! Сегодня всё в силе. Давай встретимся в <b>${time}</b>! ✨»`;
-        }
-
-        function triggerConfetti() {
-            confetti({
-                particleCount: 35,
-                spread: 50,
-                origin: { y: 0.75 }
+        // Start Story + Play Music
+        function startStory() {
+            bgAudio.play().then(() => {
+                bgAudio.volume = 0.4;
+                audioPlaying = true;
+                document.getElementById('sound-icon').innerText = '🎵';
+            }).catch(() => {
+                audioPlaying = false;
             });
+            
+            nextScene(1);
         }
 
-        function runProgressBar(text) {
-            const progressFill = document.getElementById('progress-fill');
-            const progressText = document.getElementById('progress-text');
+        // 1. Scene Navigation
+        function nextScene(sceneIndex) {
+            document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+            currentScene = sceneIndex;
+            
+            const target = document.getElementById(`scene-${sceneIndex}`);
+            if (target) target.classList.add('active');
 
-            progressFill.style.width = '0%';
-            setTimeout(() => {
-                progressFill.style.width = '100%';
-                progressText.innerText = text;
-            }, 100);
+            // Update Progress bar
+            for (let i = 0; i <= 3; i++) {
+                const bar = document.getElementById(`bar-${i}`);
+                if (i < sceneIndex) bar.style.width = '100%';
+                else if (i === sceneIndex) bar.style.width = '100%';
+                else bar.style.width = '0%';
+            }
+
+            if (sceneIndex === 2) {
+                initScratchCard();
+            }
+
+            if (sceneIndex === 3) {
+                confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+            }
         }
 
-        function sendTimeTelegram() {
-            const text = `Привет! ☕ Я закрутилась, но сегодня всё в силе!\n\nДавай встретимся сегодня в: ${selectedTime}! Жду тебя 😉`;
+        // 2. Select Vibe
+        function selectVibe(vibeText, element) {
+            selectedVibe = vibeText;
+            document.querySelectorAll('.choice-card').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+            document.getElementById('ticket-vibe').innerText = vibeText;
+        }
+
+        // 3. Audio Toggle
+        function toggleSound() {
+            if (audioPlaying) {
+                bgAudio.pause();
+                document.getElementById('sound-icon').innerText = '🔇';
+                audioPlaying = false;
+            } else {
+                bgAudio.play().catch(() => {});
+                document.getElementById('sound-icon').innerText = '🎵';
+                audioPlaying = true;
+            }
+        }
+
+        // 4. Scratch Card Logic
+        function initScratchCard() {
+            const canvas = document.getElementById('scratch-canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+
+            // Fill with silver layer
+            ctx.fillStyle = '#b2bec3';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            
+            // Add Text on Silver
+            ctx.fillStyle = '#2d3436';
+            ctx.font = 'bold 14px sans-serif';
+            ctx.textAlign = 'center';
+            ctx.fillText('✨ Стри здесь пальцем ✨', canvas.width / 2, canvas.height / 2 + 5);
+
+            let isDrawing = false;
+
+            function scratch(e) {
+                if (!isDrawing) return;
+                const rect = canvas.getBoundingClientRect();
+                const x = (e.clientX || e.touches[0].clientX) - rect.left;
+                const y = (e.clientY || e.touches[0].clientY) - rect.top;
+
+                ctx.globalCompositeOperation = 'destination-out';
+                ctx.beginPath();
+                ctx.arc(x, y, 20, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            canvas.addEventListener('mousedown', () => isDrawing = true);
+            canvas.addEventListener('mouseup', () => isDrawing = false);
+            canvas.addEventListener('mousemove', scratch);
+
+            canvas.addEventListener('touchstart', () => isDrawing = true);
+            canvas.addEventListener('touchend', () => isDrawing = false);
+            canvas.addEventListener('touchmove', scratch);
+        }
+
+        // 5. Send Telegram Result
+        function sendTelegram() {
+            const text = `Привет! ☕ Я посмотрела кофейную историю!\n\nМой выбор:\n• Вайб: ${selectedVibe}\n• Бонус: Секретный десерт 🍰\n\nЖду сегодняшнюю встречу! 😉`;
             const encodedText = encodeURIComponent(text);
 
             const tgAppUrl = `tg://msg_url?url=&text=${encodedText}`;
             const tgWebUrl = `https://t.me/share/url?url=&text=${encodedText}`;
 
             window.location.href = tgAppUrl;
-
-            setTimeout(() => {
-                window.open(tgWebUrl, '_blank');
-            }, 1000);
+            setTimeout(() => { window.open(tgWebUrl, '_blank'); }, 1000);
         }
+
+        // 6. Particles Canvas BG
+        const pCanvas = document.getElementById('particles-canvas');
+        const pCtx = pCanvas.getContext('2d');
+        let particles = [];
+
+        function resizePCanvas() {
+            pCanvas.width = pCanvas.offsetWidth;
+            pCanvas.height = pCanvas.offsetHeight;
+        }
+        window.addEventListener('resize', resizePCanvas);
+        resizePCanvas();
+
+        for (let i = 0; i < 30; i++) {
+            particles.push({
+                x: Math.random() * pCanvas.width,
+                y: Math.random() * pCanvas.height,
+                radius: Math.random() * 2 + 1,
+                speedY: Math.random() * 0.5 + 0.2,
+                opacity: Math.random() * 0.5 + 0.3
+            });
+        }
+
+        function animateParticles() {
+            pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+            pCtx.fillStyle = 'rgba(255, 255, 255, 0.6)';
+
+            particles.forEach(p => {
+                p.y -= p.speedY;
+                if (p.y < 0) p.y = pCanvas.height;
+                pCtx.beginPath();
+                pCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
+                pCtx.fill();
+            });
+
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
     </script>
 </body>
 </html>
