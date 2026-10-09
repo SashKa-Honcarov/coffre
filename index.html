@@ -3,9 +3,19 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Coffee Story ✨</title>
+    <title>NFS WIREFRAME NIGHT RIDER 🏎️🔥</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
     <style>
+        :root {
+            --wire-green: #00ff66;
+            --wire-orange: #ff3300;
+            --wire-cyan: #00f0ff;
+            --bg-dark: #020205;
+            --card-bg: rgba(5, 8, 15, 0.85);
+            --text-main: #ffffff;
+            --text-sub: #99aab5;
+        }
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -15,8 +25,11 @@
         }
 
         body {
-            background-color: #0b0c10;
-            color: #ffffff;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 50% 30%, rgba(0, 255, 102, 0.08) 0%, transparent 70%),
+                linear-gradient(0deg, #010103, #080c14);
+            color: var(--text-main);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -24,42 +37,42 @@
             overflow: hidden;
         }
 
-        /* Cinema Viewport Container */
         .story-container {
             width: 100%;
             max-width: 420px;
             height: 100vh;
-            max-height: 850px;
-            background: linear-gradient(180deg, #1f1c2c 0%, #928dab 100%);
+            max-height: 880px;
+            background: var(--bg-dark);
             position: relative;
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            box-shadow: 0 0 50px rgba(0, 255, 102, 0.15), 0 0 100px rgba(255, 51, 0, 0.1);
+            border: 2px solid var(--wire-green);
         }
 
         @media (min-width: 450px) {
             .story-container {
-                border-radius: 32px;
+                border-radius: 24px;
                 height: 90vh;
             }
         }
 
-        /* Progress Bar Top */
+        /* Progress Bar HUD */
         .progress-bars {
             position: absolute;
             top: 16px;
             left: 16px;
             right: 16px;
             display: flex;
-            gap: 6px;
+            gap: 4px;
             z-index: 50;
         }
 
         .bar-bg {
             flex: 1;
-            height: 4px;
-            background: rgba(255, 255, 255, 0.3);
+            height: 5px;
+            background: rgba(0, 255, 102, 0.2);
             border-radius: 2px;
             overflow: hidden;
         }
@@ -67,31 +80,29 @@
         .bar-fill {
             height: 100%;
             width: 0%;
-            background: #ffffff;
-            transition: width 0.1s linear;
+            background: var(--wire-green);
+            box-shadow: 0 0 8px var(--wire-green);
+            transition: width 0.3s ease;
         }
 
-        /* Audio Control */
         .sound-toggle {
             position: absolute;
             top: 30px;
             right: 20px;
             z-index: 50;
-            background: rgba(0, 0, 0, 0.4);
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            color: white;
-            padding: 8px 14px;
-            border-radius: 20px;
-            font-size: 0.8rem;
+            background: rgba(0,0,0,0.8);
+            border: 1px solid var(--wire-green);
+            color: var(--wire-green);
+            padding: 6px 14px;
+            font-size: 0.75rem;
             cursor: pointer;
-            display: flex;
-            align-items: center;
-            gap: 6px;
+            border-radius: 6px;
+            font-weight: 800;
+            letter-spacing: 1px;
+            box-shadow: 0 0 10px rgba(0, 255, 102, 0.3);
         }
 
-        /* Particles Canvas Background */
-        #particles-canvas {
+        #bg-canvas {
             position: absolute;
             top: 0;
             left: 0;
@@ -101,14 +112,14 @@
             pointer-events: none;
         }
 
-        /* Scene Base Style */
+        /* Scenes Base */
         .scene {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            padding: 80px 24px 40px;
+            padding: 75px 20px 30px;
             display: flex;
             flex-direction: column;
             justify-content: space-between;
@@ -116,416 +127,738 @@
             text-align: center;
             opacity: 0;
             visibility: hidden;
-            transition: opacity 0.6s ease, transform 0.6s ease;
-            transform: scale(0.95);
             z-index: 10;
         }
 
         .scene.active {
             opacity: 1;
             visibility: visible;
-            transform: scale(1);
         }
 
-        /* Typography & Buttons */
-        .scene-badge {
-            background: rgba(255, 255, 255, 0.15);
-            backdrop-filter: blur(8px);
-            padding: 6px 16px;
-            border-radius: 20px;
-            font-size: 0.8rem;
-            font-weight: 700;
-            letter-spacing: 1px;
+        /* --- PREMIER UNIQUE TRANSITIONS --- */
+        /* Переход 1: Лазерный скан (Laser Scan) */
+        .trans-scan.active {
+            animation: laserScan 0.6s cubic-bezier(0.77, 0, 0.175, 1) both;
+        }
+        @keyframes laserScan {
+            0% { transform: translateY(-100%); opacity: 0; filter: brightness(3); }
+            50% { filter: drop-shadow(0 0 20px var(--wire-green)); }
+            100% { transform: translateY(0); opacity: 1; filter: none; }
+        }
+
+        /* Переход 2: Цифровой сдвиг (Cyber Glitch) */
+        .trans-glitch.active {
+            animation: cyberGlitch 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+        }
+        @keyframes cyberGlitch {
+            0% { transform: scale(1.1) skewX(10deg); opacity: 0; filter: invert(0.8) hue-rotate(180deg); }
+            40% { transform: scale(0.98) skewX(-5deg); filter: contrast(200%); }
+            100% { transform: scale(1) skewX(0); opacity: 1; filter: none; }
+        }
+
+        /* Переход 3: Радарный зум (Radar Zoom) */
+        .trans-zoom.active {
+            animation: radarZoom 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+        }
+        @keyframes radarZoom {
+            0% { transform: scale(0.6); opacity: 0; filter: blur(8px); }
+            100% { transform: scale(1); opacity: 1; filter: blur(0); }
+        }
+
+        /* Переход 4: Неоновый слайд (Matrix Slide) */
+        .trans-slide.active {
+            animation: matrixSlide 0.5s cubic-bezier(0.4, 0, 0.2, 1) both;
+        }
+        @keyframes matrixSlide {
+            0% { transform: translateX(60px); opacity: 0; }
+            100% { transform: translateX(0); opacity: 1; }
+        }
+
+        /* Переход 5: Взрывной финал (Matrix Flash) */
+        .trans-flash.active {
+            animation: matrixFlash 0.6s ease both;
+        }
+        @keyframes matrixFlash {
+            0% { transform: scale(1.05); opacity: 0; filter: brightness(3) sepia(1); }
+            100% { transform: scale(1); opacity: 1; filter: none; }
+        }
+
+        .nfs-badge {
+            background: rgba(0, 255, 102, 0.15);
+            border: 1px solid var(--wire-green);
+            color: var(--wire-green);
+            padding: 4px 16px;
+            font-size: 0.75rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            border-radius: 4px;
+            display: inline-block;
+            box-shadow: 0 0 12px rgba(0, 255, 102, 0.3);
             text-transform: uppercase;
-            border: 1px solid rgba(255, 255, 255, 0.25);
         }
 
         h1 {
-            font-size: 2rem;
-            font-weight: 800;
-            margin-top: 16px;
-            line-height: 1.25;
-            background: linear-gradient(135deg, #ffffff 0%, #ffd1ff 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            font-size: 1.7rem;
+            font-weight: 900;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 8px;
+            line-height: 1.2;
+            color: #fff;
+            text-shadow: 0 0 15px rgba(0, 255, 102, 0.4);
         }
 
         p.desc {
-            font-size: 1rem;
-            color: rgba(255, 255, 255, 0.85);
-            margin-top: 12px;
-            line-height: 1.5;
+            font-size: 0.9rem;
+            color: var(--text-sub);
+            margin-top: 8px;
+            line-height: 1.4;
         }
 
-        .main-btn {
-            background: linear-gradient(135deg, #ff758c 0%, #ff7eb3 100%);
-            color: white;
+        .nfs-btn {
+            background: linear-gradient(135deg, var(--wire-green) 0%, #00cc52 100%);
+            color: #000;
             border: none;
             width: 100%;
-            padding: 18px;
-            border-radius: 20px;
+            padding: 16px;
             font-size: 1.05rem;
-            font-weight: 700;
+            font-weight: 900;
+            letter-spacing: 1px;
+            text-transform: uppercase;
             cursor: pointer;
-            box-shadow: 0 10px 25px rgba(255, 117, 140, 0.4);
+            border-radius: 12px;
+            box-shadow: 0 0 25px rgba(0, 255, 102, 0.4);
             transition: transform 0.2s, box-shadow 0.2s;
-            text-decoration: none;
-            display: block;
         }
 
-        .main-btn:active {
+        .nfs-btn:active {
             transform: scale(0.97);
         }
 
-        /* Choice Cards for Scene 2 */
-        .choices-grid {
+        /* Selection Cards */
+        .style-grid {
             display: flex;
             flex-direction: column;
-            gap: 12px;
+            gap: 8px;
             width: 100%;
-            margin-top: 20px;
+            margin-top: 10px;
         }
 
-        .choice-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(12px);
-            border: 1.5px solid rgba(255, 255, 255, 0.2);
-            border-radius: 18px;
-            padding: 16px;
+        .style-card {
+            background: var(--card-bg);
+            border: 1.5px solid rgba(0, 255, 102, 0.2);
+            border-radius: 12px;
+            padding: 10px 14px;
             display: flex;
             align-items: center;
-            gap: 14px;
+            gap: 12px;
             cursor: pointer;
-            transition: all 0.25s ease;
+            transition: all 0.2s ease;
             text-align: left;
+            position: relative;
         }
 
-        .choice-card:hover, .choice-card.selected {
-            background: rgba(255, 255, 255, 0.25);
-            border-color: #ff758c;
-            transform: translateX(4px);
+        .style-card.selected {
+            border-color: var(--wire-green);
+            background: rgba(0, 255, 102, 0.15);
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.3);
         }
 
-        .choice-icon {
-            font-size: 1.8rem;
+        .style-icon {
+            font-size: 1.6rem;
         }
 
-        .choice-info h4 {
-            font-size: 1rem;
-            font-weight: 700;
+        .style-info h4 {
+            font-size: 0.92rem;
+            font-weight: 800;
+            color: #fff;
         }
 
-        .choice-info p {
-            font-size: 0.8rem;
-            color: rgba(255, 255, 255, 0.7);
+        .style-info p {
+            font-size: 0.74rem;
+            color: var(--text-sub);
             margin-top: 2px;
         }
 
-        /* Scratch Card Area for Scene 3 */
-        .scratch-container {
-            position: relative;
-            width: 280px;
-            height: 140px;
-            margin: 20px auto;
+        /* WIREFRAME CAR TOP-DOWN LAYOUT (EXACTLY LIKE YOUR IMAGE) */
+        .wireframe-car-container {
+            background: #000000;
+            border: 2px solid var(--wire-green);
             border-radius: 20px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            padding: 10px;
+            width: 100%;
+            max-width: 290px;
+            margin: 6px auto;
+            position: relative;
+            box-shadow: inset 0 0 25px rgba(0, 255, 102, 0.2), 0 0 20px rgba(0, 255, 102, 0.15);
         }
 
-        .scratch-secret {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(135deg, #ffeaa7 0%, #ff7675 100%);
+        .wire-hud-top {
+            font-size: 0.65rem;
+            color: var(--wire-green);
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            font-weight: 800;
+            margin-bottom: 8px;
+            text-align: center;
+            text-shadow: 0 0 6px var(--wire-green);
+        }
+
+        .wire-seats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            position: relative;
+        }
+
+        .wire-seat {
+            background: rgba(0, 255, 102, 0.03);
+            border: 1.5px dashed rgba(0, 255, 102, 0.3);
+            border-radius: 10px;
+            padding: 10px 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            text-align: center;
+            min-height: 65px;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            color: #2d3436;
-            padding: 12px;
         }
 
-        .scratch-secret h3 {
-            font-size: 1.1rem;
+        .wire-seat.driver {
+            background: rgba(255, 51, 0, 0.12);
+            border: 1.5px solid var(--wire-orange);
+            cursor: default;
+        }
+
+        .wire-seat.selected {
+            background: rgba(0, 255, 102, 0.2);
+            border: 2px solid var(--wire-green);
+            box-shadow: 0 0 15px rgba(0, 255, 102, 0.5);
+        }
+
+        .wire-seat.locked {
+            opacity: 0.3;
+            cursor: not-allowed;
+            border-color: #333;
+            background: #050505;
+        }
+
+        .wire-name {
+            font-size: 0.78rem;
             font-weight: 800;
+            color: #fff;
         }
 
-        .scratch-secret p {
-            font-size: 0.85rem;
-            margin-top: 4px;
-            font-weight: 600;
+        .wire-sub {
+            font-size: 0.62rem;
+            color: var(--wire-green);
+            margin-top: 2px;
         }
 
-        #scratch-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
+        /* Garage Tuning Checkboxes */
+        .garage-box {
+            background: var(--card-bg);
+            border: 1.5px solid rgba(0, 255, 102, 0.2);
+            border-radius: 16px;
+            padding: 10px 14px;
             width: 100%;
-            height: 100%;
-            cursor: pointer;
-            touch-action: none;
+            margin-top: 8px;
+            text-align: left;
         }
 
-        /* Ticket Final Screen - FIXED STYLES */
-        .ticket-box {
-            background: rgba(255, 255, 255, 0.95);
-            color: #2d3436;
-            border-radius: 24px;
-            padding: 24px 20px;
+        .checkbox-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.08);
+            cursor: pointer;
+            transition: all 0.25s ease;
+        }
+
+        .checkbox-row:last-child {
+            border-bottom: none;
+        }
+
+        .checkbox-row.locked {
+            opacity: 0.35;
+            cursor: not-allowed;
+            filter: grayscale(1);
+        }
+
+        .nfs-box {
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--wire-green);
+            border-radius: 4px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            transition: all 0.2s;
+        }
+
+        .checkbox-row.checked .nfs-box {
+            background: var(--wire-green);
+            box-shadow: 0 0 10px var(--wire-green);
+        }
+
+        .checkbox-row.checked .nfs-box::after {
+            content: "✓";
+            color: #000;
+            font-weight: 900;
+            font-size: 13px;
+        }
+
+        .checkbox-info h5 {
+            font-size: 0.85rem;
+            font-weight: 800;
+            color: #fff;
+        }
+
+        .checkbox-info p {
+            font-size: 0.7rem;
+            color: var(--text-sub);
+            margin-top: 1px;
+        }
+
+        .unlock-badge {
+            font-size: 0.6rem;
+            color: var(--wire-orange);
+            font-weight: 700;
+            display: block;
+            margin-top: 1px;
+        }
+
+        /* Final Street Race Pass */
+        .pass-box {
+            background: rgba(5, 10, 20, 0.95);
+            border: 2px solid var(--wire-green);
+            border-radius: 16px;
+            padding: 14px;
             width: 100%;
             text-align: left;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.3);
-            margin: 20px 0;
+            box-shadow: 0 0 25px rgba(0, 255, 102, 0.25);
+            margin: 8px 0;
         }
 
-        .ticket-row {
+        .pass-row {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            gap: 12px;
-            margin-bottom: 12px;
-            font-size: 0.9rem;
+            gap: 10px;
+            margin-bottom: 8px;
+            font-size: 0.84rem;
+            border-bottom: 1px dashed rgba(0,255,102,0.2);
+            padding-bottom: 5px;
         }
 
-        .ticket-row span.label {
-            color: #636e72;
+        .pass-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .pass-row span.label {
+            color: #888;
             font-weight: 600;
             white-space: nowrap;
-            flex-shrink: 0;
         }
 
-        .ticket-row span.val {
-            font-weight: 800;
-            color: #d63031;
+        .pass-row span.val {
+            color: var(--wire-green);
+            font-weight: 900;
             text-align: right;
             word-break: break-word;
+        }
+
+        /* Tachometer */
+        .tacho-gauge {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 5px solid #111;
+            border-top-color: var(--wire-orange);
+            border-right-color: var(--wire-green);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin: 8px auto;
+            box-shadow: 0 0 25px rgba(0, 255, 102, 0.25);
         }
     </style>
 </head>
 <body>
 
     <div class="story-container">
-        <!-- Progress bar header -->
+        <!-- Progress Bar Header (6 steps: 0 to 5) -->
         <div class="progress-bars">
             <div class="bar-bg"><div class="bar-fill" id="bar-0"></div></div>
             <div class="bar-bg"><div class="bar-fill" id="bar-1"></div></div>
             <div class="bar-bg"><div class="bar-fill" id="bar-2"></div></div>
             <div class="bar-bg"><div class="bar-fill" id="bar-3"></div></div>
+            <div class="bar-bg"><div class="bar-fill" id="bar-4"></div></div>
+            <div class="bar-bg"><div class="bar-fill" id="bar-5"></div></div>
         </div>
 
         <button class="sound-toggle" onclick="toggleSound()">
-            <span id="sound-icon">🎵</span> <span id="sound-text">Звук</span>
+            <span id="sound-icon">🎵</span> <span id="sound-text">SOUND ON</span>
         </button>
 
-        <canvas id="particles-canvas"></canvas>
+        <canvas id="bg-canvas"></canvas>
 
-        <!-- SCENE 0: Intro -->
-        <div class="scene active" id="scene-0">
-            <div class="scene-badge">Interactive Story 🎬</div>
+        <!-- SCENE 0: Garage Start (Transition: Laser Scan) -->
+        <div class="scene active trans-scan" id="scene-0">
+            <div class="nfs-badge">WIREFRAME RIDE 🏎️</div>
             <div>
-                <h1>Кофейная История ✨</h1>
-                <p class="desc">У меня есть идея на вечер, но сюжет зависит только от твоего выбора!</p>
+                <div class="tacho-gauge">
+                    <span style="font-size: 2rem; font-weight: 900; color: var(--wire-green);">7000</span>
+                    <span style="font-size: 0.6rem; color: #888; letter-spacing: 1px;">RPM / TURBO</span>
+                </div>
+                <h1>ГОНКИ НА СЕГОДНЯ? ⚡</h1>
+                <p class="desc">Тачка прогрета, бак полный. Давай настроим параметры нашего ночного выезда!</p>
             </div>
-            <button class="main-btn" onclick="startStory()">Смотреть историю 🚀</button>
+            <button class="nfs-btn" onclick="startEngine()">ENGINE START 🔴</button>
         </div>
 
-        <!-- SCENE 1: Choose Vibe -->
-        <div class="scene" id="scene-1">
-            <div class="scene-badge">Шаг 1 из 3</div>
+        <!-- SCENE 1: Drive Style (Transition: Cyber Glitch) -->
+        <div class="scene trans-glitch" id="scene-1">
+            <div class="nfs-badge">STAGE 1: STYLE</div>
             <div>
-                <h1>Какой вайб выберем?</h1>
-                <p class="desc">Выбери настроение нашего сегодняшнего вечера:</p>
+                <h1>ВЫБЕРИ СТИЛЬ ЕЗДЫ:</h1>
+                <p class="desc">Какое настроение ставим на вечерний заезд?</p>
 
-                <div class="choices-grid">
-                    <div class="choice-card" onclick="selectVibe('Уютный & Ламповый 🕯️', this)">
-                        <div class="choice-icon">🕯️</div>
-                        <div class="choice-info">
-                            <h4>Уютный & Ламповый</h4>
-                            <p>Тихий столик, тёплый кофе и долгие разговоры</p>
+                <div class="style-grid">
+                    <div class="style-card selected" onclick="selectStyle('Дрифт в каждый столб 🏎️💥', this)">
+                        <div class="style-icon">🏎️</div>
+                        <div class="style-info">
+                            <h4>Дрифт в каждый столб</h4>
+                            <p>Полный газ, развороты и считаем столбы</p>
                         </div>
                     </div>
-                    <div class="choice-card" onclick="selectVibe('Гуляем & Кофе на вынос 🌆', this)">
-                        <div class="choice-icon">🌆</div>
-                        <div class="choice-info">
-                            <h4>Гуляем & Кофе на вынос</h4>
-                            <p>Бамбл с круасаном в руки и красивые мы на прогулке</p>
+                    <div class="style-card" onclick="selectStyle('Ночной круиз & Музон 🌆', this)">
+                        <div class="style-icon">🌆</div>
+                        <div class="style-info">
+                            <h4>Ночной круиз & Музон</h4>
+                            <p>Бассы в сабвуфере и огни ночного города</p>
                         </div>
                     </div>
-                    <div class="choice-card" onclick="selectVibe('Секретный маршрут & Импровизация 🎭', this)">
-                        <div class="choice-icon">🎭</div>
-                        <div class="choice-info">
-                            <h4>Секретный маршрут & Импровизация</h4>
-                            <p>Никаких планов — выбираем направление на ходу и смотрим, куда приведёт вечер</p>
+                    <div class="style-card" onclick="selectStyle('Секретный маршрут за кофе ☕', this)">
+                        <div class="style-icon">☕</div>
+                        <div class="style-info">
+                            <h4>Маршрут за кофе</h4>
+                            <p>Едем за вкусностями и паркуемся с видом</p>
                         </div>
                     </div>
                 </div>
             </div>
-            <button class="main-btn" onclick="nextScene(2)">Далее ✨</button>
+            <button class="nfs-btn" onclick="nextScene(2)">NEXT STAGE ➔</button>
         </div>
 
-        <!-- SCENE 2: Scratch Card Bonus -->
-        <div class="scene" id="scene-2">
-            <div class="scene-badge">Шаг 2 из 3</div>
+        <!-- SCENE 2: Wireframe Car Interior (Transition: Radar Zoom) -->
+        <div class="scene trans-zoom" id="scene-2">
+            <div class="nfs-badge">STAGE 2: CAD LAYOUT</div>
             <div>
-                <h1>Секретный бонус 🎁</h1>
-                <p class="desc">Стри пальцем или мышкой защитный слой, чтобы открыть свой подарок:</p>
+                <h1>СХЕМА САЛОНА (WIREFRAME):</h1>
+                <p class="desc">Выбери своё место в CAD-модели автомобиля:</p>
 
-                <div class="scratch-container">
-                    <div class="scratch-secret">
-                        <h3>🎉 Твой Бонус:</h3>
-                        <p>«Любой десерт на выбор!» 🍰✨</p>
-                    </div>
-                    <canvas id="scratch-canvas"></canvas>
-                </div>
-            </div>
-            <button class="main-btn" onclick="nextScene(3)">Получить билет 🎟️</button>
-        </div>
+                <div class="wireframe-car-container">
+                    <div class="wire-hud-top">⚡ HUD TOP-DOWN WIREFRAME ⚡</div>
+                    
+                    <div class="wire-seats-grid">
+                        <!-- Водительское место (Занято тобой) -->
+                        <div class="wire-seat driver">
+                            <div class="wire-name">💺 Водитель</div>
+                            <div class="wire-sub">Это я (Занято) 😎</div>
+                        </div>
 
-        <!-- SCENE 3: Final Ticket & Telegram -->
-        <div class="scene" id="scene-3">
-            <div class="scene-badge">Финал 🎬</div>
-            <div>
-                <h1>Твой Кино-Билет 🎟️</h1>
-                <p class="desc">Всё готово для нашего идеального вечера!</p>
+                        <!-- Переднее пассажирское -->
+                        <div class="wire-seat selected" id="seat-front" onclick="selectSeat('Справа спереди (Штурман) 💺', 'seat-front')">
+                            <div class="wire-name">💺 Спереди</div>
+                            <div class="wire-sub">Штурман & Диджей</div>
+                        </div>
 
-                <div class="ticket-box">
-                    <div class="ticket-row">
-                        <span class="label">Событие:</span>
-                        <span class="val">Кофейный вечер</span>
-                    </div>
-                    <div class="ticket-row">
-                        <span class="label">Выбранный вайб:</span>
-                        <span class="val" id="ticket-vibe">Уютный 🕯️</span>
-                    </div>
-                    <div class="ticket-row">
-                        <span class="label">Бонус:</span>
-                        <span class="val">Десерт 🍰</span>
-                    </div>
-                    <div class="ticket-row">
-                        <span class="label">Когда:</span>
-                        <span class="val">Сегодня вечер</span>
+                        <!-- Заднее VIP -->
+                        <div class="wire-seat" id="seat-back" onclick="selectSeat('Сзади в VIP-стиле (Чилл) 😎', 'seat-back')">
+                            <div class="wire-name">🛋️ Задний ряд</div>
+                            <div class="wire-sub">Мафиозный чилл</div>
+                        </div>
+
+                        <!-- Заблокированное место (Сама за руль) -->
+                        <div class="wire-seat locked" title="Заблокировано: за руль сажусь я!">
+                            <div class="wire-name">🔒 Сама за руль</div>
+                            <div class="wire-sub">Заблокировано ❌</div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <button class="main-btn" onclick="sendTelegram()">Отправить ответ в Telegram 🚀</button>
+            <button class="nfs-btn" onclick="nextScene(3)">NEXT STAGE ➔</button>
+        </div>
+
+        <!-- SCENE 3: Passenger State (Transition: Matrix Slide) -->
+        <div class="scene trans-slide" id="scene-3">
+            <div class="nfs-badge">STAGE 3: CONDITION</div>
+            <div>
+                <h1>ТВОЁ СОСТОЯНИЕ НА СЕГОДНЯ:</h1>
+                <p class="desc">Какое у тебя настроение перед выездом?</p>
+
+                <div class="style-grid">
+                    <div class="style-card selected" onclick="selectState('Трезвая и спокойная 🍸', this)">
+                        <div class="style-icon">🍸</div>
+                        <div class="style-info">
+                            <h4>Трезвая и спокойная</h4>
+                            <p>Абсолютный контроль и чистый вайб</p>
+                        </div>
+                    </div>
+                    <div class="style-card" onclick="selectState('Слегка выпившая / Игривая 🥂', this)">
+                        <div class="style-icon">🥂</div>
+                        <div class="style-info">
+                            <h4>Слегка выпившая</h4>
+                            <p>Настроение на высоте, смех и улыбки</p>
+                        </div>
+                    </div>
+                    <div class="style-card" onclick="selectState('Конкретная веселуха: буду приставать 😉🔥', this)">
+                        <div class="style-icon">🔥</div>
+                        <div class="style-info">
+                            <h4>Конкретная веселуха</h4>
+                            <p>Буду приставать к тебе всю дорогу!</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="nfs-btn" onclick="nextScene(4)">NEXT STAGE ➔</button>
+        </div>
+
+        <!-- SCENE 4: Driver Mods (Transition: Cyber Glitch) -->
+        <div class="scene trans-glitch" id="scene-4">
+            <div class="nfs-badge">STAGE 4: DRIVER MODS</div>
+            <div>
+                <h1>МОДИФИКАЦИЯ ПИЛОТА:</h1>
+                <p class="desc">Прокачай характеристики перед стартом:</p>
+
+                <div class="garage-box">
+                    <div class="checkbox-row" id="row-funny" onclick="toggleFunny()">
+                        <div class="nfs-box"></div>
+                        <div class="checkbox-info">
+                            <h5>Веселый водитель 🥳</h5>
+                            <p>Хорошее настроение и классные байки</p>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-row locked" id="row-torso" onclick="toggleTorso()">
+                        <div class="nfs-box"></div>
+                        <div class="checkbox-info">
+                            <h5>Водитель с голым торсом 💪</h5>
+                            <p id="torso-sub">Тюнинг заблокирован системой</p>
+                            <span class="unlock-badge" id="torso-badge">🔒 Включи "Веселый водитель"</span>
+                        </div>
+                    </div>
+
+                    <div class="checkbox-row locked">
+                        <div class="nfs-box"></div>
+                        <div class="checkbox-info">
+                            <h5>Пьяный водитель ❌🍺</h5>
+                            <p>Заблокировано полицией (Только трезвый!)</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <button class="nfs-btn" onclick="nextScene(5)">GET CONTRACT 🎟️</button>
+        </div>
+
+        <!-- SCENE 5: Final Race Contract (Transition: Matrix Flash) -->
+        <div class="scene trans-flash" id="scene-5">
+            <div class="nfs-badge">CONTRACT READY 🏁</div>
+            <div>
+                <h1>STREET RACE PASS 🎟️</h1>
+                <p class="desc">Контракт на вечерний заезд утвержден:</p>
+
+                <div class="pass-box">
+                    <div class="pass-row">
+                        <span class="label">Рейс:</span>
+                        <span class="val">Wireframe Trip</span>
+                    </div>
+                    <div class="pass-row">
+                        <span class="label">Стиль езды:</span>
+                        <span class="val" id="pass-style">Дрифт в столбы</span>
+                    </div>
+                    <div class="pass-row">
+                        <span class="label">Посадка:</span>
+                        <span class="val" id="pass-seat">Справа спереди</span>
+                    </div>
+                    <div class="pass-row">
+                        <span class="label">Состояние:</span>
+                        <span class="val" id="pass-state">Трезвая и спокойная</span>
+                    </div>
+                    <div class="pass-row">
+                        <span class="label">Пилот:</span>
+                        <span class="val" id="pass-driver">Базовый пилот</span>
+                    </div>
+                    <div class="pass-row">
+                        <span class="label">Старт:</span>
+                        <span class="val">Сегодня вечером</span>
+                    </div>
+                </div>
+            </div>
+            <button class="nfs-btn" onclick="sendTelegram()">ПОДТВЕРДИТЬ В TELEGRAM 🚀</button>
         </div>
     </div>
 
-    <!-- Ambient Audio -->
-    <audio id="bg-audio" loop src="https://cdn.pixabay.com/download/audio/2022/05/27/audio_1808fbf07a.mp3?filename=lofi-study-112191.mp3"></audio>
+    <!-- Background Music Track -->
+    <audio id="bg-audio" loop src="https://cdn.pixabay.com/download/audio/2022/03/15/audio_c8c8264585.mp3?filename=synthwave-80s-110045.mp3" preload="auto"></audio>
 
     <script>
         let currentScene = 0;
-        let selectedVibe = 'Уютный & Ламповый 🕯️';
+        let selectedStyle = 'Дрифт в каждый столб 🏎️💥';
+        let selectedSeat = 'Справа спереди (Штурман) 💺';
+        let selectedState = 'Трезвая и спокойная 🍸';
+        let isFunnyChecked = false;
+        let isTorsoChecked = false;
         let audioPlaying = false;
+
         const bgAudio = document.getElementById('bg-audio');
 
-        // Start Story + Play Music
-        function startStory() {
+        function startEngine() {
+            bgAudio.volume = 0.6;
             bgAudio.play().then(() => {
-                bgAudio.volume = 0.4;
                 audioPlaying = true;
                 document.getElementById('sound-icon').innerText = '🎵';
-            }).catch(() => {
-                audioPlaying = false;
+                document.getElementById('sound-text').innerText = 'SOUND ON';
+            }).catch(err => {
+                console.log("Audio play blocked:", err);
             });
-            
+
             nextScene(1);
         }
 
-        // 1. Scene Navigation
         function nextScene(sceneIndex) {
-            document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('.scene').forEach(s => {
+                s.classList.remove('active');
+            });
             currentScene = sceneIndex;
-            
+
             const target = document.getElementById(`scene-${sceneIndex}`);
-            if (target) target.classList.add('active');
+            if (target) {
+                target.classList.add('active');
+            }
 
-            // Update Progress bar
-            for (let i = 0; i <= 3; i++) {
+            // Progress bars (6 steps total: 0 to 5)
+            for (let i = 0; i <= 5; i++) {
                 const bar = document.getElementById(`bar-${i}`);
-                if (i < sceneIndex) bar.style.width = '100%';
-                else if (i === sceneIndex) bar.style.width = '100%';
-                else bar.style.width = '0%';
+                if (bar) {
+                    if (i <= sceneIndex) bar.style.width = '100%';
+                    else bar.style.width = '0%';
+                }
             }
 
-            if (sceneIndex === 2) {
-                initScratchCard();
-            }
-
-            if (sceneIndex === 3) {
-                confetti({ particleCount: 80, spread: 70, origin: { y: 0.6 } });
+            if (sceneIndex === 5) {
+                updateContractSummary();
+                confetti({ particleCount: 100, spread: 90, origin: { y: 0.6 } });
             }
         }
 
-        // 2. Select Vibe
-        function selectVibe(vibeText, element) {
-            selectedVibe = vibeText;
-            document.querySelectorAll('.choice-card').forEach(c => c.classList.remove('selected'));
+        function selectStyle(styleText, element) {
+            selectedStyle = styleText;
+            element.parentElement.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
             element.classList.add('selected');
-            document.getElementById('ticket-vibe').innerText = vibeText;
         }
 
-        // 3. Audio Toggle
+        function selectSeat(seatText, elementId) {
+            selectedSeat = seatText;
+            document.querySelectorAll('.wire-seats-grid .wire-seat').forEach(seat => {
+                if (!seat.classList.contains('driver') && !seat.classList.contains('locked')) {
+                    seat.classList.remove('selected');
+                }
+            });
+            document.getElementById(elementId).classList.add('selected');
+        }
+
+        function selectState(stateText, element) {
+            selectedState = stateText;
+            element.parentElement.querySelectorAll('.style-card').forEach(c => c.classList.remove('selected'));
+            element.classList.add('selected');
+        }
+
+        function toggleFunny() {
+            const rowFunny = document.getElementById('row-funny');
+            const rowTorso = document.getElementById('row-torso');
+            const torsoSub = document.getElementById('torso-sub');
+            const torsoBadge = document.getElementById('torso-badge');
+
+            isFunnyChecked = !isFunnyChecked;
+
+            if (isFunnyChecked) {
+                rowFunny.classList.add('checked');
+                rowTorso.classList.remove('locked');
+                torsoSub.innerText = 'Доступно для активации!';
+                torsoBadge.innerText = '🔓 МОД РАЗБЛОКИРОВАН!';
+                torsoBadge.style.color = 'var(--wire-green)';
+            } else {
+                rowFunny.classList.remove('checked');
+                isTorsoChecked = false;
+                rowTorso.classList.remove('checked');
+                rowTorso.classList.add('locked');
+                torsoSub.innerText = 'Тюнинг заблокирован системой';
+                torsoBadge.innerText = '🔒 Включи "Веселый водитель"';
+                torsoBadge.style.color = 'var(--wire-orange)';
+            }
+        }
+
+        function toggleTorso() {
+            if (!isFunnyChecked) return;
+
+            const rowTorso = document.getElementById('row-torso');
+            isTorsoChecked = !isTorsoChecked;
+
+            if (isTorsoChecked) rowTorso.classList.add('checked');
+            else rowTorso.classList.remove('checked');
+        }
+
         function toggleSound() {
             if (audioPlaying) {
                 bgAudio.pause();
                 document.getElementById('sound-icon').innerText = '🔇';
+                document.getElementById('sound-text').innerText = 'SOUND OFF';
                 audioPlaying = false;
             } else {
-                bgAudio.play().catch(() => {});
-                document.getElementById('sound-icon').innerText = '🎵';
-                audioPlaying = true;
+                bgAudio.play().then(() => {
+                    document.getElementById('sound-icon').innerText = '🎵';
+                    document.getElementById('sound-text').innerText = 'SOUND ON';
+                    audioPlaying = true;
+                }).catch(() => {});
             }
         }
 
-        // 4. Scratch Card Logic
-        function initScratchCard() {
-            const canvas = document.getElementById('scratch-canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = canvas.offsetWidth;
-            canvas.height = canvas.offsetHeight;
+        function updateContractSummary() {
+            document.getElementById('pass-style').innerText = selectedStyle;
+            document.getElementById('pass-seat').innerText = selectedSeat;
+            document.getElementById('pass-state').innerText = selectedState;
 
-            // Fill with silver layer
-            ctx.fillStyle = '#b2bec3';
-            ctx.fillRect(0, 0, canvas.width, canvas.height);
-            
-            // Add Text on Silver
-            ctx.fillStyle = '#2d3436';
-            ctx.font = 'bold 14px sans-serif';
-            ctx.textAlign = 'center';
-            ctx.fillText('✨ Стри здесь пальцем ✨', canvas.width / 2, canvas.height / 2 + 5);
+            let mods = [];
+            if (isFunnyChecked) mods.push('Веселый 🥳');
+            if (isTorsoChecked) mods.push('Голый торс 💪');
+            if (mods.length === 0) mods.push('Стандарт');
 
-            let isDrawing = false;
-
-            function scratch(e) {
-                if (!isDrawing) return;
-                const rect = canvas.getBoundingClientRect();
-                const x = (e.clientX || e.touches[0].clientX) - rect.left;
-                const y = (e.clientY || e.touches[0].clientY) - rect.top;
-
-                ctx.globalCompositeOperation = 'destination-out';
-                ctx.beginPath();
-                ctx.arc(x, y, 20, 0, Math.PI * 2);
-                ctx.fill();
-            }
-
-            canvas.addEventListener('mousedown', () => isDrawing = true);
-            canvas.addEventListener('mouseup', () => isDrawing = false);
-            canvas.addEventListener('mousemove', scratch);
-
-            canvas.addEventListener('touchstart', () => isDrawing = true);
-            canvas.addEventListener('touchend', () => isDrawing = false);
-            canvas.addEventListener('touchmove', scratch);
+            document.getElementById('pass-driver').innerText = mods.join(' + ');
         }
 
-        // 5. Send Telegram Result
         function sendTelegram() {
-            const text = `Привет! ☕ Я посмотрела кофейную историю!\n\nМой выбор:\n• Вайб: ${selectedVibe}\n• Бонус: Секретный десерт 🍰\n\nЖду сегодняшнюю встречу! 😉`;
-            const encodedText = encodeURIComponent(text);
+            let opts = [];
+            if (isFunnyChecked) opts.push('• Веселый водитель 🥳');
+            if (isTorsoChecked) opts.push('• Водитель с голым торсом 💪');
+            if (opts.length === 0) opts.push('• Обычный пилот 🚗');
 
+            const text = `Привет! 🏎️ Я настроила наш ночной заезд:\n\n` +
+                         `📍 Стиль: ${selectedStyle}\n` +
+                         `💺 Посадка в Wireframe авто: ${selectedSeat}\n` +
+                         `🥂 Моё состояние: ${selectedState}\n` +
+                         `⚙️ Моды водителя:\n${opts.join('\n')}\n\n` +
+                         `Погнали! 😉🏁`;
+
+            const encodedText = encodeURIComponent(text);
             const tgAppUrl = `tg://msg_url?url=&text=${encodedText}`;
             const tgWebUrl = `https://t.me/share/url?url=&text=${encodedText}`;
 
@@ -533,43 +866,42 @@
             setTimeout(() => { window.open(tgWebUrl, '_blank'); }, 1000);
         }
 
-        // 6. Particles Canvas BG
-        const pCanvas = document.getElementById('particles-canvas');
-        const pCtx = pCanvas.getContext('2d');
-        let particles = [];
+        // Wireframe Grid Background Animation
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
 
-        function resizePCanvas() {
-            pCanvas.width = pCanvas.offsetWidth;
-            pCanvas.height = pCanvas.offsetHeight;
+        function resizeCanvas() {
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
         }
-        window.addEventListener('resize', resizePCanvas);
-        resizePCanvas();
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
 
-        for (let i = 0; i < 30; i++) {
-            particles.push({
-                x: Math.random() * pCanvas.width,
-                y: Math.random() * pCanvas.height,
-                radius: Math.random() * 2 + 1,
-                speedY: Math.random() * 0.5 + 0.2,
-                opacity: Math.random() * 0.5 + 0.3
-            });
+        let gridY = 0;
+        function drawGrid() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = 'rgba(0, 255, 102, 0.08)';
+            ctx.lineWidth = 1;
+
+            gridY = (gridY + 1) % 40;
+
+            for (let x = 0; x < canvas.width; x += 40) {
+                ctx.beginPath();
+                ctx.moveTo(x, 0);
+                ctx.lineTo(x, canvas.height);
+                ctx.stroke();
+            }
+
+            for (let y = gridY; y < canvas.height; y += 40) {
+                ctx.beginPath();
+                ctx.moveTo(0, y);
+                ctx.lineTo(canvas.width, y);
+                ctx.stroke();
+            }
+
+            requestAnimationFrame(drawGrid);
         }
-
-        function animateParticles() {
-            pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
-            pCtx.fillStyle = 'rgba(255, 255, 255, 0.6)';
-
-            particles.forEach(p => {
-                p.y -= p.speedY;
-                if (p.y < 0) p.y = pCanvas.height;
-                pCtx.beginPath();
-                pCtx.arc(p.x, p.y, p.radius, 0, Math.PI * 2);
-                pCtx.fill();
-            });
-
-            requestAnimationFrame(animateParticles);
-        }
-        animateParticles();
+        drawGrid();
     </script>
 </body>
 </html>
